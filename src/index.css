@@ -2,7 +2,7 @@
 @import './theme.css';
 
 body {
-  background-color: var(--color-espresso);
-  color: var(--color-warm-cream);
+  background-color: var(--color-white);
+  color: var(--color-ink);
   font-family: var(--font-pp-neue-montreal);
 }
