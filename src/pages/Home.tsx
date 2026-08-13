@@ -25,27 +25,27 @@ function Hero() {
   return (
     <section className="relative overflow-hidden bg-navy-deep">
       <img
-        src="https://picsum.photos/seed/mariam-hero/1200/900"
+        src="https://picsum.photos/seed/mariam-hero-city/1600/900"
         alt=""
-        className="absolute inset-y-0 right-0 hidden w-1/2 border-l border-navy-light object-cover md:block"
+        className="absolute inset-0 h-full w-full object-cover"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,30,63,0.97)_35%,rgba(10,30,63,0.55)_75%)]" />
-      <div className="relative mx-auto max-w-[1200px] px-6 py-14 sm:py-20 md:py-28">
-        <div className="max-w-xl">
-          <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
-            Join the campaign effort
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,21,41,0.75)_0%,rgba(6,21,41,0.85)_60%,rgba(6,21,41,0.97)_100%)]" />
+      <div className="relative mx-auto max-w-[1200px] px-6 py-16 sm:py-24 md:py-32">
+        <div className="max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-crimson">
+            Join the Campaign Effort
           </p>
-          <h1 className="mt-4 text-[30px] font-medium leading-[1.15] text-white sm:text-[38px] md:text-[52px]">
-            Vision Beyond Sight: Transforming Kahawa West
+          <h1 className="mt-4 text-[34px] font-bold leading-[1.1] text-white sm:text-[46px] md:text-[64px]">
+            We Can Transform Kahawa West Together!
           </h1>
-          <p className="mt-4 text-white/70">
+          <p className="mt-5 max-w-lg text-base text-white/75 sm:text-lg">
             From the slums to a world-class university, breaking barriers as
             a media pioneer, community leader, and your incoming 2027 MCA
             for Kahawa West Ward.
           </p>
 
           <form
-            className="mt-8 flex flex-col gap-3 rounded-2xl bg-white p-3 shadow-lg sm:flex-row sm:items-center sm:rounded-full sm:p-2 sm:pl-4"
+            className="mt-10 flex max-w-xl flex-col gap-0 overflow-hidden rounded-lg bg-white shadow-xl sm:flex-row"
             onSubmit={handleSubmit}
           >
             <input
@@ -54,7 +54,7 @@ function Hero() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-full border border-hairline bg-transparent px-3 py-2.5 text-sm text-ink outline-none sm:w-1/3 sm:border-0"
+              className="w-full border-b border-hairline bg-transparent px-5 py-4 text-sm text-ink outline-none sm:w-1/3 sm:border-b-0"
             />
             <input
               type="email"
@@ -62,11 +62,11 @@ function Hero() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-full border border-hairline bg-transparent px-3 py-2.5 text-sm text-ink outline-none sm:w-1/3 sm:rounded-none sm:border-0 sm:border-l sm:border-hairline sm:px-2"
+              className="w-full border-b border-hairline bg-transparent px-5 py-4 text-sm text-ink outline-none sm:w-1/3 sm:border-b-0 sm:border-l"
             />
             <button
               type="submit"
-              className="w-full rounded-full bg-crimson px-5 py-2.5 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark sm:w-auto"
+              className="w-full shrink-0 bg-crimson px-6 py-4 text-sm font-bold uppercase tracking-wide text-white hover:bg-crimson-dark sm:w-auto"
             >
               Join Now
             </button>
