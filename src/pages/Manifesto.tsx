@@ -39,7 +39,7 @@ function Manifesto() {
           className="mt-8 aspect-[12/5] w-full rounded border border-hairline object-cover"
         />
 
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {pillars.map((p) => (
             <div key={p.title} className="overflow-hidden rounded border border-hairline bg-navy">
               <img
