@@ -33,13 +33,25 @@ function Manifesto() {
           A bold reminder that our only alignment is with God and the
           grassroots community, not political cartels.
         </p>
+        <img
+          src="https://picsum.photos/seed/manifesto-banner/1200/500"
+          alt="Campaign banner (mock)"
+          className="mt-8 aspect-[12/5] w-full rounded border border-hairline object-cover"
+        />
 
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
           {pillars.map((p) => (
-            <div key={p.title} className="rounded border border-hairline bg-navy p-6">
-              <div className="mb-4 h-10 w-10 rounded-full bg-crimson" />
-              <h3 className="text-base font-semibold text-white">{p.title}</h3>
-              <p className="mt-2 text-sm text-white/70">{p.body}</p>
+            <div key={p.title} className="overflow-hidden rounded border border-hairline bg-navy">
+              <img
+                src={`https://picsum.photos/seed/pillar-${p.title}/500/300`}
+                alt=""
+                className="h-32 w-full object-cover opacity-80"
+              />
+              <div className="p-6">
+                <div className="mb-4 h-10 w-10 rounded-full bg-crimson" />
+                <h3 className="text-base font-semibold text-white">{p.title}</h3>
+                <p className="mt-2 text-sm text-white/70">{p.body}</p>
+              </div>
             </div>
           ))}
         </div>
