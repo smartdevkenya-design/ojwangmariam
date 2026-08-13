@@ -23,14 +23,14 @@ function Hero() {
   }
 
   return (
-    <section className="relative flex min-h-[100dvh] items-center overflow-hidden bg-navy-deep">
+    <section className="relative flex min-h-[100dvh] items-center overflow-hidden bg-navy-deep [@media(max-height:500px)]:min-h-0">
       <img
         src="https://picsum.photos/seed/mariam-hero-city/1600/900"
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,21,41,0.75)_0%,rgba(6,21,41,0.85)_60%,rgba(6,21,41,0.97)_100%)]" />
-      <div className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-24 md:py-32">
+      <div className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-24 md:py-32 [@media(max-height:500px)]:py-16">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-crimson">
             Join the Campaign Effort
@@ -95,7 +95,7 @@ function Highlights() {
         </h2>
         <div className="mx-auto mt-3 h-0.5 w-10 bg-crimson" />
 
-        <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {stories.map((item) => (
             <Link
               key={item.id}
