@@ -1,7 +1,27 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { stories } from '../data/stories'
 
 function Hero() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!name.trim() || !email.trim()) return
+
+    const subject = encodeURIComponent('I want to join the campaign')
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\nI'd like to join the Ojwang Mariam campaign effort.`
+    )
+    window.location.href = `mailto:ojwangmariam@gmail.com?subject=${subject}&body=${body}`
+
+    setSubmitted(true)
+    setName('')
+    setEmail('')
+  }
+
   return (
     <section className="relative overflow-hidden bg-navy-deep">
       <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,30,63,0.97)_35%,rgba(10,30,63,0.55)_75%)]" />
@@ -22,16 +42,22 @@ function Hero() {
 
           <form
             className="mt-8 flex flex-col gap-3 rounded-full bg-white p-2 pl-4 shadow-lg sm:flex-row sm:items-center"
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleSubmit}
           >
             <input
               type="text"
               placeholder="Your Name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full rounded-full border-0 bg-transparent px-2 py-2.5 text-sm text-ink outline-none sm:w-1/3"
             />
             <input
               type="email"
               placeholder="Your Email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-full border-0 bg-transparent px-2 py-2.5 text-sm text-ink outline-none sm:w-1/3 sm:border-l sm:border-hairline"
             />
             <button
@@ -41,6 +67,12 @@ function Hero() {
               Join Now
             </button>
           </form>
+          {submitted && (
+            <p className="mt-3 text-sm text-white/80">
+              Thanks! Your email client should be opening now — send the
+              message to complete signing up.
+            </p>
+          )}
         </div>
       </div>
     </section>
