@@ -169,11 +169,20 @@ function IssuesPanel() {
   ]
   return (
     <section className="grid grid-cols-1 md:grid-cols-2">
-      <div className="flex min-h-[320px] items-center justify-center bg-navy-deep px-6 py-16">
-        <span className="text-center text-2xl font-medium uppercase tracking-[0.2em] text-white/90">
+      <Link
+        to="/manifesto"
+        className="group relative flex min-h-[320px] items-center justify-center overflow-hidden bg-navy-deep px-6 py-16"
+      >
+        <img
+          src="https://picsum.photos/seed/manifesto-panel/900/700"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-40 transition-opacity group-hover:opacity-50"
+        />
+        <div className="absolute inset-0 bg-navy-deep/50" />
+        <span className="relative text-center text-2xl font-medium uppercase tracking-[0.2em] text-white/90">
           The Manifesto
         </span>
-      </div>
+      </Link>
       <div className="bg-navy">
         <ul className="divide-y divide-navy-light">
           {issues.map((issue) => (
