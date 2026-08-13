@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet } from 'react-router-dom'
 import { stories } from '../data/stories'
 
 const navLinks = [
+  { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/book', label: 'The Book' },
   { to: '/manifesto', label: 'Manifesto' },
@@ -26,7 +27,7 @@ function Nav() {
         </Link>
         <div className="hidden gap-2 md:flex">
           {navLinks.map((l) => (
-            <NavLink key={l.to} to={l.to} className={linkClass}>
+            <NavLink key={l.to} to={l.to} end={l.to === '/'} className={linkClass}>
               {l.label}
             </NavLink>
           ))}
