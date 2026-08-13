@@ -93,16 +93,16 @@ function Footer() {
   ]
   return (
     <footer className="bg-navy-deep border-t border-navy-light">
-      <div className="mx-auto max-w-[1200px] px-6 py-16">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
+      <div className="mx-auto max-w-[1200px] px-6 py-10 sm:py-16">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:gap-10 lg:grid-cols-4">
+          <div className="col-span-2 lg:col-span-1">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-white">About</h3>
-            <p className="mt-4 text-sm leading-relaxed text-white/60">
+            <p className="mt-3 text-sm leading-relaxed text-white/60">
               Ojwang Mariam — award-winning multimedia journalist, founder
               and CEO of Wueeh TV Kenya, and 2027 MCA candidate for Kahawa
               West Ward. Siasa Safi, Maisha Bora.
             </p>
-            <ul className="mt-4 space-y-1 text-sm text-white/60">
+            <ul className="mt-3 space-y-1 text-sm text-white/60">
               <li>Kahawa West, Nairobi</li>
               <li>
                 <a href="tel:+254722731328" className="hover:text-crimson">
@@ -121,7 +121,7 @@ function Footer() {
             <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
               Quick Links
             </h3>
-            <ul className="mt-4 space-y-2 text-sm">
+            <ul className="mt-3 space-y-1.5 text-sm">
               {quickLinks.map((l) => (
                 <li key={l.to}>
                   <Link to={l.to} className="text-white/60 hover:text-crimson">
@@ -136,7 +136,7 @@ function Footer() {
             <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
               Latest Highlights
             </h3>
-            <ul className="mt-4 space-y-4">
+            <ul className="mt-3 space-y-3">
               {stories.map((s) => (
                 <li key={s.id}>
                   <Link
@@ -145,15 +145,15 @@ function Footer() {
                   >
                     {s.title}
                   </Link>
-                  <p className="mt-1 text-xs text-white/40">{s.date}</p>
+                  <p className="mt-0.5 text-xs text-white/40">{s.date}</p>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-white">Tags</h3>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {tags.map((tag) => (
                 <span
                   key={tag}
@@ -168,7 +168,7 @@ function Footer() {
       </div>
 
       <div className="border-t border-navy-light">
-        <div className="mx-auto flex max-w-[1200px] flex-col items-start justify-between gap-4 px-6 py-6 text-xs text-white/50 md:flex-row md:items-center">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-start justify-between gap-2 px-6 py-4 text-xs text-white/50 sm:gap-4 sm:py-6 md:flex-row md:items-center">
           <span>© 2026 Ojwang Mariam. Kahawa West 2027.</span>
           <span>Siasa Safi, Maisha Bora.</span>
         </div>
