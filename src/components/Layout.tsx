@@ -12,6 +12,40 @@ const navLinks = [
   { to: '/contact', label: 'Contact' },
 ]
 
+function TopBar() {
+  return (
+    <div className="hidden bg-navy-deep text-white/70 md:block">
+      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-6 py-2 text-xs">
+        <p className="truncate">
+          <span className="font-semibold uppercase tracking-wide text-crimson">Press:</span>{' '}
+          Believe Become — the memoir launches campaign-wide youth push
+        </p>
+        <div className="flex shrink-0 items-center gap-5">
+          <a href="tel:+254722731328" className="flex items-center gap-1.5 hover:text-white">
+            <span aria-hidden>📞</span> +254 722 731 328
+          </a>
+          <a href="mailto:ojwangmariam@gmail.com" className="flex items-center gap-1.5 hover:text-white">
+            <span aria-hidden>✉️</span> ojwangmariam@gmail.com
+          </a>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Logo() {
+  return (
+    <Link to="/" className="flex shrink-0 flex-col items-start leading-none">
+      <span className="border-2 border-crimson px-2.5 py-1 text-sm font-bold tracking-wide text-white sm:text-base">
+        OJWANG MARIAM
+      </span>
+      <span className="mt-1 text-[10px] font-medium tracking-[0.2em] text-crimson">
+        ★ ★ ★ &nbsp;TUKO KADI
+      </span>
+    </Link>
+  )
+}
+
 function Nav() {
   const [open, setOpen] = useState(false)
   const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -20,54 +54,55 @@ function Nav() {
     }`
 
   return (
-    <nav className="sticky top-0 z-50 bg-navy border-b border-navy-light">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-4">
-        <Link to="/" className="min-w-0 truncate text-sm font-medium tracking-tight text-white sm:text-base">
-          OJWANG MARIAM <span className="text-white/60 font-normal">| Tuko Kadi</span>
-        </Link>
-        <div className="hidden gap-2 md:flex">
-          {navLinks.map((l) => (
-            <NavLink key={l.to} to={l.to} end={l.to === '/'} className={linkClass}>
-              {l.label}
-            </NavLink>
-          ))}
-        </div>
-        <Link
-          to="/contact"
-          className="hidden rounded-full bg-crimson px-5 py-2.5 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark md:inline-block"
-        >
-          Contribute
-        </Link>
-        <button
-          className="shrink-0 text-white md:hidden"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? '✕' : '☰'}
-        </button>
-      </div>
-      {open && (
-        <div className="flex flex-col gap-2 border-t border-navy-light px-6 py-4 md:hidden">
-          {navLinks.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              onClick={() => setOpen(false)}
-              className="rounded-full px-4 py-2.5 text-sm font-semibold uppercase tracking-wide text-white/85 hover:bg-navy-light hover:text-white"
-            >
-              {l.label}
-            </Link>
-          ))}
+    <>
+      <TopBar />
+      <nav className="sticky top-0 z-50 bg-navy border-b border-navy-light">
+        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3">
+          <Logo />
+          <div className="hidden gap-2 md:flex">
+            {navLinks.map((l) => (
+              <NavLink key={l.to} to={l.to} end={l.to === '/'} className={linkClass}>
+                {l.label}
+              </NavLink>
+            ))}
+          </div>
           <Link
             to="/contact"
-            onClick={() => setOpen(false)}
-            className="mt-2 rounded-full bg-crimson px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wide text-white"
+            className="hidden rounded-full bg-crimson px-5 py-2.5 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark md:inline-block"
           >
             Contribute
           </Link>
+          <button
+            className="shrink-0 text-white md:hidden"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? '✕' : '☰'}
+          </button>
         </div>
-      )}
-    </nav>
+        {open && (
+          <div className="flex flex-col gap-2 border-t border-navy-light px-6 py-4 md:hidden">
+            {navLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                onClick={() => setOpen(false)}
+                className="rounded-full px-4 py-2.5 text-sm font-semibold uppercase tracking-wide text-white/85 hover:bg-navy-light hover:text-white"
+              >
+                {l.label}
+              </Link>
+            ))}
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="mt-2 rounded-full bg-crimson px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wide text-white"
+            >
+              Contribute
+            </Link>
+          </div>
+        )}
+      </nav>
+    </>
   )
 }
 
@@ -177,12 +212,34 @@ function Footer() {
   )
 }
 
+function FloatingActions() {
+  return (
+    <div className="fixed right-0 top-1/2 z-40 hidden -translate-y-1/2 flex-col lg:flex">
+      <Link
+        to="/book"
+        className="flex h-14 w-14 items-center justify-center bg-crimson text-xl text-white shadow-lg hover:bg-crimson-dark"
+        aria-label="Order the book"
+      >
+        📖
+      </Link>
+      <a
+        href="tel:+254722731328"
+        className="flex h-14 w-14 items-center justify-center bg-navy text-xl text-white shadow-lg hover:bg-navy-light"
+        aria-label="Call the campaign"
+      >
+        📞
+      </a>
+    </div>
+  )
+}
+
 function Layout() {
   return (
     <div className="min-h-screen bg-white text-ink">
       <Nav />
       <Outlet />
       <Footer />
+      <FloatingActions />
     </div>
   )
 }
