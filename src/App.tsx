@@ -7,6 +7,7 @@ import Book from './pages/Book'
 import Manifesto from './pages/Manifesto'
 import Media from './pages/Media'
 import Gallery from './pages/Gallery'
+import Volunteer from './pages/Volunteer'
 import Contact from './pages/Contact'
 import Story from './pages/Story'
 import NotFound from './pages/NotFound'
@@ -23,6 +24,7 @@ function App() {
           <Route path="manifesto" element={<Manifesto />} />
           <Route path="media" element={<Media />} />
           <Route path="gallery" element={<Gallery />} />
+          <Route path="volunteer" element={<Volunteer />} />
           <Route path="contact" element={<Contact />} />
           <Route path="stories/:id" element={<Story />} />
           <Route path="*" element={<NotFound />} />
