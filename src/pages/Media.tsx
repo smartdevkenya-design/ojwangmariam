@@ -23,10 +23,17 @@ function Media() {
           Impact Beyond Politics
         </h1>
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {items.map((i) => (
-            <div key={i.title} className="border-t-2 border-navy bg-white p-5 shadow-sm">
-              <h3 className="text-sm font-semibold text-navy">{i.title}</h3>
-              <p className="mt-2 text-sm text-muted">{i.body}</p>
+          {items.map((i, idx) => (
+            <div key={i.title} className="overflow-hidden border-t-2 border-navy bg-white shadow-sm">
+              <img
+                src={`https://picsum.photos/seed/media-${idx}/500/300`}
+                alt=""
+                className="h-32 w-full object-cover"
+              />
+              <div className="p-5">
+                <h3 className="text-sm font-semibold text-navy">{i.title}</h3>
+                <p className="mt-2 text-sm text-muted">{i.body}</p>
+              </div>
             </div>
           ))}
         </div>
