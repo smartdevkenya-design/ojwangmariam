@@ -22,7 +22,7 @@ function Media() {
         <h1 className="mt-2 max-w-2xl text-2xl font-medium text-navy sm:text-[28px] md:text-[32px]">
           Impact Beyond Politics
         </h1>
-        <div className="mt-8 grid grid-cols-1 gap-5 sm:gap-6 md:mt-12 md:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 md:mt-12 lg:grid-cols-3">
           {items.map((i, idx) => (
             <div key={i.title} className="overflow-hidden rounded border-t-2 border-navy bg-white shadow-sm">
               <img
