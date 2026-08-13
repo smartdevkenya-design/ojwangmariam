@@ -45,7 +45,7 @@ function Hero() {
           </p>
 
           <form
-            className="mt-10 flex max-w-xl flex-col gap-0 overflow-hidden rounded-lg bg-white shadow-xl sm:flex-row"
+            className="mt-8 flex max-w-xl flex-col gap-0 overflow-hidden rounded-lg bg-white shadow-xl sm:flex-row"
             onSubmit={handleSubmit}
           >
             <input
@@ -78,6 +78,35 @@ function Hero() {
             </p>
           )}
         </div>
+      </div>
+    </section>
+  )
+}
+
+function CtaRibbon() {
+  const items = [
+    { title: 'Volunteer', body: 'Get involved with the campaign', to: '/volunteer' },
+    { title: 'Donate Now', body: 'Support via M-Pesa Paybill 247247', to: '/contact' },
+    { title: 'Order the Book', body: 'Get your copy of Believe Become', to: '/book' },
+  ]
+  return (
+    <section className="bg-crimson">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-1 divide-y divide-white/20 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        {items.map((item) => (
+          <Link
+            key={item.title}
+            to={item.to}
+            className="flex items-center gap-4 px-6 py-5 text-white hover:bg-crimson-dark transition-colors"
+          >
+            <span className="h-9 w-9 shrink-0 rounded-full border border-white/60" />
+            <span>
+              <span className="block text-sm font-semibold uppercase tracking-wide">
+                {item.title}
+              </span>
+              <span className="block text-xs text-white/80">{item.body}</span>
+            </span>
+          </Link>
+        ))}
       </div>
     </section>
   )
@@ -182,6 +211,7 @@ function Home() {
   return (
     <>
       <Hero />
+      <CtaRibbon />
       <Highlights />
       <IssuesPanel />
     </>
