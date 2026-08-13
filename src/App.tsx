@@ -208,11 +208,11 @@ function Highlights() {
 
 function IssuesPanel() {
   const issues = [
-    { title: 'Inclusive Leadership', body: 'Equal resources for youth, women & PWDs' },
-    { title: 'Accountable Governance', body: 'Transparent bursaries & development funds' },
-    { title: 'Sustainable Empowerment', body: 'Markets, sanitation & youth tech hubs' },
-    { title: 'About Mariam', body: 'The journey from Kahawa West to Kenyatta University' },
-    { title: 'The Book', body: 'Believe Become — order your copy' },
+    { title: 'Inclusive Leadership', body: 'Equal resources for youth, women & PWDs', href: '#manifesto' },
+    { title: 'Accountable Governance', body: 'Transparent bursaries & development funds', href: '#manifesto' },
+    { title: 'Sustainable Empowerment', body: 'Markets, sanitation & youth tech hubs', href: '#manifesto' },
+    { title: 'About Mariam', body: 'The journey from Kahawa West to Kenyatta University', href: '#about' },
+    { title: 'The Book', body: 'Believe Become — order your copy', href: '#book' },
   ]
   return (
     <section className="grid grid-cols-1 md:grid-cols-2">
@@ -224,14 +224,19 @@ function IssuesPanel() {
       <div className="bg-navy">
         <ul className="divide-y divide-navy-light">
           {issues.map((issue) => (
-            <li key={issue.title} className="flex items-center gap-4 px-8 py-5">
-              <span className="h-9 w-9 shrink-0 rounded-full border border-white/40" />
-              <span>
-                <span className="block text-sm font-semibold uppercase tracking-wide text-white">
-                  {issue.title}
+            <li key={issue.title}>
+              <a
+                href={issue.href}
+                className="flex items-center gap-4 px-8 py-5 transition-colors hover:bg-navy-light"
+              >
+                <span className="h-9 w-9 shrink-0 rounded-full border border-white/40" />
+                <span>
+                  <span className="block text-sm font-semibold uppercase tracking-wide text-white">
+                    {issue.title}
+                  </span>
+                  <span className="block text-xs text-white/60">{issue.body}</span>
                 </span>
-                <span className="block text-xs text-white/60">{issue.body}</span>
-              </span>
+              </a>
             </li>
           ))}
         </ul>
