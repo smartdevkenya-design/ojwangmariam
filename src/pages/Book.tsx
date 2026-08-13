@@ -5,7 +5,11 @@ function Book() {
     <section className="bg-offwhite">
       <div className="mx-auto max-w-[1200px] px-6 py-16">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
-          <div className="aspect-[3/4] w-full max-w-sm rounded border border-hairline bg-navy/5" />
+          <img
+            src="https://picsum.photos/seed/believe-become-cover/600/800"
+            alt="Believe Become book cover (mock)"
+            className="aspect-[3/4] w-full max-w-sm rounded border border-hairline object-cover"
+          />
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
               Featured Masterpiece
