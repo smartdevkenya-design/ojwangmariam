@@ -41,7 +41,7 @@ function Logo() {
         OJWANG MARIAM
       </span>
       <span className="mt-1 text-[10px] font-medium tracking-[0.2em] text-crimson">
-        ★ ★ ★ &nbsp;TUKO KADI
+        ★ ★ ★ &nbsp;BELIEVE BECOME
       </span>
     </Link>
   )
