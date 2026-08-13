@@ -23,14 +23,14 @@ function Hero() {
   }
 
   return (
-    <section className="relative overflow-hidden bg-navy-deep">
+    <section className="relative flex min-h-[100dvh] items-center overflow-hidden bg-navy-deep">
       <img
         src="https://picsum.photos/seed/mariam-hero-city/1600/900"
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,21,41,0.75)_0%,rgba(6,21,41,0.85)_60%,rgba(6,21,41,0.97)_100%)]" />
-      <div className="relative mx-auto max-w-[1200px] px-6 py-16 sm:py-24 md:py-32">
+      <div className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-24 md:py-32">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-crimson">
             Join the Campaign Effort
@@ -78,35 +78,6 @@ function Hero() {
             </p>
           )}
         </div>
-      </div>
-    </section>
-  )
-}
-
-function CtaRibbon() {
-  const items = [
-    { title: 'Volunteer', body: 'Get involved with the campaign', to: '/contact' },
-    { title: 'Donate Now', body: 'Support via M-Pesa Paybill 247247', to: '/contact' },
-    { title: 'Order the Book', body: 'Get your copy of Believe Become', to: '/book' },
-  ]
-  return (
-    <section className="bg-crimson">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-1 divide-y divide-white/20 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-        {items.map((item) => (
-          <Link
-            key={item.title}
-            to={item.to}
-            className="flex items-center gap-4 px-6 py-5 text-white hover:bg-crimson-dark transition-colors"
-          >
-            <span className="h-9 w-9 shrink-0 rounded-full border border-white/60" />
-            <span>
-              <span className="block text-sm font-semibold uppercase tracking-wide">
-                {item.title}
-              </span>
-              <span className="block text-xs text-white/80">{item.body}</span>
-            </span>
-          </Link>
-        ))}
       </div>
     </section>
   )
@@ -211,7 +182,6 @@ function Home() {
   return (
     <>
       <Hero />
-      <CtaRibbon />
       <Highlights />
       <IssuesPanel />
     </>
