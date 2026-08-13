@@ -1,7 +1,7 @@
 function Contact() {
   return (
     <section className="bg-navy-deep">
-      <div className="mx-auto max-w-[1200px] px-6 py-16">
+      <div className="mx-auto max-w-[1200px] px-6 py-10 sm:py-16">
         <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
           Get Involved
         </p>

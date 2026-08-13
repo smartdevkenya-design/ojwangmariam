@@ -15,7 +15,7 @@ function Manifesto() {
   ]
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-[1200px] px-6 py-16">
+      <div className="mx-auto max-w-[1200px] px-6 py-10 sm:py-16">
         <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
           Kahawa West 2027
         </p>
@@ -45,12 +45,12 @@ function Manifesto() {
               <img
                 src={`https://picsum.photos/seed/pillar-${p.title}/500/300`}
                 alt=""
-                className="h-32 w-full object-cover opacity-80"
+                className="aspect-[16/9] w-full object-cover opacity-80"
               />
-              <div className="p-6">
+              <div className="p-5 sm:p-6">
                 <div className="mb-4 h-10 w-10 rounded-full bg-crimson" />
                 <h3 className="text-base font-semibold text-white">{p.title}</h3>
-                <p className="mt-2 text-sm text-white/70">{p.body}</p>
+                <p className="mt-2 text-sm leading-relaxed text-white/70">{p.body}</p>
               </div>
             </div>
           ))}

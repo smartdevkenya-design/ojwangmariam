@@ -8,7 +8,7 @@ function Story() {
   if (!story) {
     return (
       <section className="bg-white">
-        <div className="mx-auto max-w-2xl px-6 py-16">
+        <div className="mx-auto max-w-2xl px-6 py-10 sm:py-16">
           <p className="text-navy">Story not found.</p>
           <Link to="/" className="mt-4 inline-block text-sm font-medium uppercase tracking-wide text-crimson">
             ← Back to Home
@@ -20,7 +20,7 @@ function Story() {
 
   return (
     <section className="bg-offwhite">
-      <div className="mx-auto max-w-2xl px-6 py-16">
+      <div className="mx-auto max-w-2xl px-6 py-10 sm:py-16">
         <Link
           to="/"
           className="text-sm font-medium uppercase tracking-wide text-crimson hover:text-crimson-dark"

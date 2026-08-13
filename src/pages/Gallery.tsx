@@ -9,7 +9,7 @@ function Gallery() {
   ]
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-[1200px] px-6 py-16">
+      <div className="mx-auto max-w-[1200px] px-6 py-10 sm:py-16">
         <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">Gallery</p>
         <h1 className="mt-2 max-w-2xl text-[28px] font-medium text-navy md:text-[32px]">
           Moments From the Ground

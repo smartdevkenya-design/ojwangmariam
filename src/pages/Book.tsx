@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 function Book() {
   return (
     <section className="bg-offwhite">
-      <div className="mx-auto max-w-[1200px] px-6 py-16">
+      <div className="mx-auto max-w-[1200px] px-6 py-10 sm:py-16">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
           <img
             src="https://picsum.photos/seed/believe-become-cover/600/800"
@@ -39,13 +39,13 @@ function Book() {
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="rounded border border-hairline bg-white p-4">
                 <p className="text-sm font-medium text-navy">Standard Copy</p>
-                <p className="mt-1 text-lg font-semibold text-crimson">KSH 1,500</p>
+                <p className="mt-1 text-lg font-semibold text-crimson">KSH 1,200</p>
               </div>
               <div className="rounded border border-hairline bg-white p-4">
                 <p className="text-sm font-medium text-navy">
                   Sponsor a Slum/Rescue Centre Student
                 </p>
-                <p className="mt-1 text-lg font-semibold text-crimson">KSH 1,500</p>
+                <p className="mt-1 text-lg font-semibold text-crimson">KSH 1,200</p>
               </div>
             </div>
 

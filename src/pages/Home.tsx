@@ -30,12 +30,12 @@ function Hero() {
         className="absolute inset-y-0 right-0 hidden w-1/2 border-l border-navy-light object-cover md:block"
       />
       <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,30,63,0.97)_35%,rgba(10,30,63,0.55)_75%)]" />
-      <div className="relative mx-auto max-w-[1200px] px-6 py-20 md:py-28">
+      <div className="relative mx-auto max-w-[1200px] px-6 py-14 sm:py-20 md:py-28">
         <div className="max-w-xl">
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
             Join the campaign effort
           </p>
-          <h1 className="mt-4 text-[38px] font-medium leading-[1.15] text-white md:text-[52px]">
+          <h1 className="mt-4 text-[30px] font-medium leading-[1.15] text-white sm:text-[38px] md:text-[52px]">
             Vision Beyond Sight: Transforming Kahawa West
           </h1>
           <p className="mt-4 text-white/70">
@@ -45,7 +45,7 @@ function Hero() {
           </p>
 
           <form
-            className="mt-8 flex flex-col gap-3 rounded-full bg-white p-2 pl-4 shadow-lg sm:flex-row sm:items-center"
+            className="mt-8 flex flex-col gap-3 rounded-2xl bg-white p-3 shadow-lg sm:flex-row sm:items-center sm:rounded-full sm:p-2 sm:pl-4"
             onSubmit={handleSubmit}
           >
             <input
@@ -54,7 +54,7 @@ function Hero() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-full border-0 bg-transparent px-2 py-2.5 text-sm text-ink outline-none sm:w-1/3"
+              className="w-full rounded-full border border-hairline bg-transparent px-3 py-2.5 text-sm text-ink outline-none sm:w-1/3 sm:border-0"
             />
             <input
               type="email"
@@ -62,7 +62,7 @@ function Hero() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-full border-0 bg-transparent px-2 py-2.5 text-sm text-ink outline-none sm:w-1/3 sm:border-l sm:border-hairline"
+              className="w-full rounded-full border border-hairline bg-transparent px-3 py-2.5 text-sm text-ink outline-none sm:w-1/3 sm:rounded-none sm:border-0 sm:border-l sm:border-hairline sm:px-2"
             />
             <button
               type="submit"
@@ -115,7 +115,7 @@ function CtaRibbon() {
 function Highlights() {
   return (
     <section className="bg-offwhite">
-      <div className="mx-auto max-w-[1200px] px-6 py-16">
+      <div className="mx-auto max-w-[1200px] px-6 py-10 sm:py-16">
         <p className="text-center text-xs font-medium uppercase tracking-[0.15em] text-crimson">
           Welcome to the Campaign
         </p>
@@ -131,7 +131,7 @@ function Highlights() {
               to={`/stories/${item.id}`}
               className="group flex flex-col overflow-hidden rounded border border-hairline bg-white shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="relative flex h-40 items-end overflow-hidden bg-navy p-4">
+              <div className="relative flex aspect-[16/10] items-end overflow-hidden bg-navy p-4">
                 <img
                   src={`https://picsum.photos/seed/story-${item.id}/600/400`}
                   alt=""
