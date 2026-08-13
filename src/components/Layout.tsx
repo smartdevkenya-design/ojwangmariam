@@ -9,6 +9,7 @@ const navLinks = [
   { to: '/manifesto', label: 'Manifesto' },
   { to: '/media', label: 'Media & News' },
   { to: '/gallery', label: 'Gallery' },
+  { to: '/volunteer', label: 'Volunteer' },
   { to: '/contact', label: 'Contact' },
 ]
 
@@ -114,6 +115,7 @@ function Footer() {
     { to: '/manifesto', label: 'Manifesto' },
     { to: '/media', label: 'Media & News' },
     { to: '/gallery', label: 'Gallery' },
+    { to: '/volunteer', label: 'Volunteer' },
     { to: '/contact', label: 'Contact' },
   ]
   const tags = [
