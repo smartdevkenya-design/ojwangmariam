@@ -16,12 +16,12 @@ function Nav() {
         <a href="#top" className="text-white font-medium tracking-tight">
           OJWANG MARIAM <span className="text-white/60 font-normal">| Tuko Kadi</span>
         </a>
-        <div className="hidden gap-8 md:flex">
+        <div className="hidden gap-2 md:flex">
           {navLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="text-sm uppercase tracking-wide text-white/80 hover:text-white transition-colors"
+              className="rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white/85 transition-colors hover:bg-navy-light hover:text-white"
             >
               {l.label}
             </a>
@@ -29,7 +29,7 @@ function Nav() {
         </div>
         <a
           href="#contact"
-          className="hidden rounded bg-crimson px-5 py-2.5 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark md:inline-block"
+          className="hidden rounded-full bg-crimson px-5 py-2.5 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark md:inline-block"
         >
           Contribute
         </a>
@@ -42,13 +42,13 @@ function Nav() {
         </button>
       </div>
       {open && (
-        <div className="flex flex-col gap-4 border-t border-navy-light px-6 py-4 md:hidden">
+        <div className="flex flex-col gap-2 border-t border-navy-light px-6 py-4 md:hidden">
           {navLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className="text-sm uppercase tracking-wide text-white/80"
+              className="rounded-full px-4 py-2.5 text-sm font-semibold uppercase tracking-wide text-white/85 hover:bg-navy-light hover:text-white"
             >
               {l.label}
             </a>
@@ -56,7 +56,7 @@ function Nav() {
           <a
             href="#contact"
             onClick={() => setOpen(false)}
-            className="mt-2 rounded bg-crimson px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wide text-white"
+            className="mt-2 rounded-full bg-crimson px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wide text-white"
           >
             Contribute
           </a>
@@ -92,16 +92,16 @@ function Hero() {
             <input
               type="text"
               placeholder="Your Name"
-              className="w-full rounded border border-hairline px-3 py-2.5 text-sm text-ink outline-none focus:border-crimson sm:w-1/3"
+              className="w-full rounded-full border border-hairline px-4 py-2.5 text-sm text-ink outline-none focus:border-crimson sm:w-1/3"
             />
             <input
               type="email"
               placeholder="Your Email"
-              className="w-full rounded border border-hairline px-3 py-2.5 text-sm text-ink outline-none focus:border-crimson sm:w-1/3"
+              className="w-full rounded-full border border-hairline px-4 py-2.5 text-sm text-ink outline-none focus:border-crimson sm:w-1/3"
             />
             <button
               type="submit"
-              className="w-full rounded bg-crimson px-5 py-2.5 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark sm:w-auto"
+              className="w-full rounded-full bg-crimson px-5 py-2.5 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark sm:w-auto"
             >
               Join Now
             </button>
@@ -331,7 +331,7 @@ function Book() {
 
             <a
               href="#contact"
-              className="mt-8 inline-block rounded bg-crimson px-6 py-3 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark"
+              className="mt-8 inline-block rounded-full bg-crimson px-6 py-3 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark"
             >
               Order Online / Sponsor a Reader
             </a>
@@ -475,7 +475,7 @@ function Contact() {
         </div>
         <a
           href="mailto:ojwangmariam@gmail.com"
-          className="mt-10 inline-block rounded bg-crimson px-6 py-3 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark"
+          className="mt-10 inline-block rounded-full bg-crimson px-6 py-3 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark"
         >
           Join the Movement
         </a>
