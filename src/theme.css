@@ -1,14 +1,15 @@
 @theme {
-  /* Colors */
-  --color-espresso: #140b00;
-  --color-midnight-cocoa: #0b0600;
-  --color-warm-cream: #fff1e0;
-  --color-soft-cream: #f1f1f1;
-  --color-walnut: #43392d;
-  --color-cedar: #4f4538;
-  --color-driftwood: #85796c;
-  --color-burnt-edge: #181109;
-  --color-amber-forge: #ffb442;
+  /* Colors — Navy / Red / White campaign palette */
+  --color-navy: #0a1e3f;
+  --color-navy-deep: #061529;
+  --color-navy-light: #13284f;
+  --color-crimson: #c8102e;
+  --color-crimson-dark: #a30d25;
+  --color-white: #ffffff;
+  --color-offwhite: #f7f7f5;
+  --color-ink: #1a1a1a;
+  --color-muted: #667085;
+  --color-hairline: #e5e2dc;
 
   /* Typography */
   --font-pp-neue-montreal: 'PP Neue Montreal', ui-sans-serif, system-ui, -apple-system,
