@@ -39,13 +39,13 @@ function Book() {
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="rounded border border-hairline bg-white p-4">
                 <p className="text-sm font-medium text-navy">Standard Copy</p>
-                <p className="mt-1 text-lg font-semibold text-crimson">KSH 1,200</p>
+                <p className="mt-1 text-lg font-semibold text-crimson">KSH 1,500</p>
               </div>
               <div className="rounded border border-hairline bg-white p-4">
                 <p className="text-sm font-medium text-navy">
                   Sponsor a Slum/Rescue Centre Student
                 </p>
-                <p className="mt-1 text-lg font-semibold text-crimson">KSH 1,200</p>
+                <p className="mt-1 text-lg font-semibold text-crimson">KSH 1,500</p>
               </div>
             </div>
 
