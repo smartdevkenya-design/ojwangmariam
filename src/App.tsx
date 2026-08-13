@@ -190,12 +190,17 @@ const stories = [
   },
 ]
 
-function Highlights() {
-  const [openStory, setOpenStory] = useState<string | null>(null)
+function Highlights({
+  openStory,
+  setOpenStory,
+}: {
+  openStory: string | null
+  setOpenStory: (id: string | null) => void
+}) {
   const active = stories.find((s) => s.id === openStory) ?? null
 
   return (
-    <section className="bg-offwhite">
+    <section id="highlights" className="bg-offwhite">
       <div className="mx-auto max-w-[1200px] px-6 py-16">
         {!active ? (
           <>
@@ -214,7 +219,9 @@ function Highlights() {
                   type="button"
                   onClick={() => {
                     setOpenStory(item.id)
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                    document
+                      .getElementById('highlights')
+                      ?.scrollIntoView({ behavior: 'smooth' })
                   }}
                   className="group flex flex-col overflow-hidden rounded border border-hairline bg-white text-left shadow-sm hover:shadow-md transition-shadow"
                 >
@@ -595,24 +602,131 @@ function Contact() {
   )
 }
 
-function Footer() {
+function Footer({ onOpenStory }: { onOpenStory: (id: string) => void }) {
+  const quickLinks = [
+    { href: '#top', label: 'Home' },
+    { href: '#about', label: 'About' },
+    { href: '#book', label: 'The Book' },
+    { href: '#manifesto', label: 'Manifesto' },
+    { href: '#media', label: 'Media & News' },
+    { href: '#gallery', label: 'Gallery' },
+    { href: '#contact', label: 'Contact' },
+  ]
+  const tags = [
+    'PWD Rights',
+    'Youth Empowerment',
+    'Kahawa West',
+    'Governance',
+    'Education',
+    'Media',
+    'Community',
+    'DCP',
+  ]
   return (
-    <footer className="bg-navy border-t border-navy-light">
-      <div className="mx-auto flex max-w-[1200px] flex-col items-start justify-between gap-4 px-6 py-8 text-xs text-white/50 md:flex-row md:items-center">
-        <span>© 2026 Ojwang Mariam. Kahawa West 2027.</span>
-        <span>Siasa Safi, Maisha Bora.</span>
+    <footer className="bg-navy-deep border-t border-navy-light">
+      <div className="mx-auto max-w-[1200px] px-6 py-16">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
+              About
+            </h3>
+            <p className="mt-4 text-sm leading-relaxed text-white/60">
+              Ojwang Mariam — award-winning multimedia journalist, founder
+              and CEO of Wueeh TV Kenya, and 2027 MCA candidate for Kahawa
+              West Ward. Siasa Safi, Maisha Bora.
+            </p>
+            <ul className="mt-4 space-y-1 text-sm text-white/60">
+              <li>Kahawa West, Nairobi</li>
+              <li>
+                <a href="tel:+254722731328" className="hover:text-crimson">
+                  +254 722 731 328
+                </a>
+              </li>
+              <li>
+                <a href="mailto:ojwangmariam@gmail.com" className="hover:text-crimson">
+                  ojwangmariam@gmail.com
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
+              Quick Links
+            </h3>
+            <ul className="mt-4 space-y-2 text-sm">
+              {quickLinks.map((l) => (
+                <li key={l.href}>
+                  <a href={l.href} className="text-white/60 hover:text-crimson">
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
+              Latest Highlights
+            </h3>
+            <ul className="mt-4 space-y-4">
+              {stories.map((s) => (
+                <li key={s.id}>
+                  <button
+                    type="button"
+                    onClick={() => onOpenStory(s.id)}
+                    className="text-left text-sm text-white/80 hover:text-crimson"
+                  >
+                    {s.title}
+                  </button>
+                  <p className="mt-1 text-xs text-white/40">{s.date}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-white">
+              Tags
+            </h3>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-navy-light px-3 py-1 text-xs text-white/60"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-navy-light">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-start justify-between gap-4 px-6 py-6 text-xs text-white/50 md:flex-row md:items-center">
+          <span>© 2026 Ojwang Mariam. Kahawa West 2027.</span>
+          <span>Siasa Safi, Maisha Bora.</span>
+        </div>
       </div>
     </footer>
   )
 }
 
 function App() {
+  const [openStory, setOpenStory] = useState<string | null>(null)
+
+  const handleOpenFromFooter = (id: string) => {
+    setOpenStory(id)
+    document.getElementById('highlights')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <div className="min-h-screen bg-white text-ink">
       <Nav />
       <Hero />
       <CtaRibbon />
-      <Highlights />
+      <Highlights openStory={openStory} setOpenStory={setOpenStory} />
       <IssuesPanel />
       <About />
       <Book />
@@ -620,7 +734,7 @@ function App() {
       <Media />
       <Gallery />
       <Contact />
-      <Footer />
+      <Footer onOpenStory={handleOpenFromFooter} />
     </div>
   )
 }
