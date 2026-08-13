@@ -29,6 +29,11 @@ function About() {
           Ojwang Mariam (Mtoto Wa Mariam), this is a story of turning
           profound adversity into a lifelong mission for social justice.
         </p>
+        <img
+          src="https://picsum.photos/seed/mariam-portrait/1200/500"
+          alt="Ojwang Mariam (mock portrait)"
+          className="mt-8 aspect-[12/5] w-full rounded border border-hairline object-cover"
+        />
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {cards.map((c) => (
             <div key={c.title} className="border-t-2 border-crimson bg-offwhite p-5">
