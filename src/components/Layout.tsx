@@ -22,7 +22,7 @@ function Nav() {
   return (
     <nav className="sticky top-0 z-50 bg-navy border-b border-navy-light">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-4">
-        <Link to="/" className="text-white font-medium tracking-tight">
+        <Link to="/" className="min-w-0 truncate text-sm font-medium tracking-tight text-white sm:text-base">
           OJWANG MARIAM <span className="text-white/60 font-normal">| Tuko Kadi</span>
         </Link>
         <div className="hidden gap-2 md:flex">
@@ -39,7 +39,7 @@ function Nav() {
           Contribute
         </Link>
         <button
-          className="text-white md:hidden"
+          className="shrink-0 text-white md:hidden"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
