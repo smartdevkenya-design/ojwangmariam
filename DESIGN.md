@@ -33,3 +33,29 @@ sections. PP Neue Montreal carries the type at weights 400–600.
 ## Typeface
 
 PP Neue Montreal — same type scale as before (12–81px), weights 400–600.
+
+## Site Architecture (Multi-Page)
+
+As of this update, the site uses real routing (react-router-dom) instead of
+a single scrolling page:
+
+- `/` — Home (hero, CTA ribbon, highlights, manifesto teaser)
+- `/about` — Biography
+- `/book` — Believe Become
+- `/manifesto` — Full manifesto detail
+- `/media` — Media & achievements
+- `/gallery` — Photo gallery
+- `/contact` — Contact & donations
+- `/stories/:id` — Individual full-story pages (book-launch, manifesto, media-impact)
+
+`src/components/Layout.tsx` holds the shared Nav + Footer, rendered around
+every page via React Router's `<Outlet />`. `src/data/stories.ts` is the
+single source of truth for highlight/story content, shared by the Home
+page, the Footer's "Latest Highlights" list, and the individual story pages.
+
+**GitHub Pages routing note:** GitHub Pages has no server-side rewrites, so
+direct navigation to a sub-page (e.g. reloading `/ojwangmariam/about/`)
+would normally 404. `public/404.html` + a small decoder script in
+`index.html` work around this (the well-known rafgraph/spa-github-pages
+technique) by redirecting unknown paths back to `index.html` with the real
+path encoded in the query string, then restoring it before React mounts.
