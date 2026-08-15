@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import { useStories } from '../lib/content'
+import { useSiteContent, useStories } from '../lib/content'
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -14,19 +14,22 @@ const navLinks = [
 ]
 
 function TopBar() {
+  const { content } = useSiteContent()
+  const { pressText, phone, email } = content.topBar
+  const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`
   return (
     <div className="hidden bg-navy-deep text-white/70 md:block">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-6 py-2 text-xs">
         <p className="truncate">
           <span className="font-semibold uppercase tracking-wide text-crimson">Press:</span>{' '}
-          Believe Become — the memoir launches campaign-wide youth push
+          {pressText}
         </p>
         <div className="flex shrink-0 items-center gap-5">
-          <a href="tel:+254722731328" className="flex items-center gap-1.5 hover:text-white">
-            <span aria-hidden>📞</span> +254 722 731 328
+          <a href={phoneHref} className="flex items-center gap-1.5 hover:text-white">
+            <span aria-hidden>📞</span> {phone}
           </a>
-          <a href="mailto:ojwangmariam@gmail.com" className="flex items-center gap-1.5 hover:text-white">
-            <span aria-hidden>✉️</span> ojwangmariam@gmail.com
+          <a href={`mailto:${email}`} className="flex items-center gap-1.5 hover:text-white">
+            <span aria-hidden>✉️</span> {email}
           </a>
         </div>
       </div>
@@ -225,7 +228,7 @@ function FloatingActions() {
       >
         📖
       </Link>
-      <a
+      
         href="tel:+254722731328"
         className="flex h-14 w-14 items-center justify-center bg-navy text-xl text-white shadow-lg hover:bg-navy-light"
         aria-label="Call the campaign"
