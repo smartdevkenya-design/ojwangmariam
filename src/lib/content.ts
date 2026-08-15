@@ -350,3 +350,54 @@ export function useStories() {
 
   return { stories, loading }
 }
+
+// ── Story admin CRUD ─────────────────────────────────────────────────
+// Used by the Admin dashboard's Stories tab. The public `useStories`
+// hook above stays read-only; these talk to Supabase directly.
+
+export type StoryInput = Omit<Story, 'id'>
+
+function storyToRow(s: StoryInput) {
+  return {
+    slug: s.slug,
+    tag: s.tag,
+    title: s.title,
+    date: s.date,
+    summary: s.summary,
+    paragraphs: s.paragraphs,
+    cta_label: s.ctaLabel,
+    cta_href: s.ctaHref,
+    image_url: s.imageUrl,
+    sort_order: s.sortOrder,
+  }
+}
+
+/** Fetches every story (admin view — same table, just not cached). */
+export async function fetchAllStories(): Promise<Story[]> {
+  const { data, error } = await supabase
+    .from('stories')
+    .select('id, slug, tag, title, date, summary, paragraphs, cta_label, cta_href, image_url, sort_order')
+    .order('sort_order', { ascending: true })
+  if (error) throw error
+  return (data as StoryRow[]).map(rowToStory)
+}
+
+export async function createStory(input: StoryInput): Promise<Story> {
+  const { data, error } = await supabase
+    .from('stories')
+    .insert(storyToRow(input))
+    .select('id, slug, tag, title, date, summary, paragraphs, cta_label, cta_href, image_url, sort_order')
+    .single()
+  if (error) throw error
+  return rowToStory(data as StoryRow)
+}
+
+export async function updateStory(id: string, input: StoryInput): Promise<void> {
+  const { error } = await supabase.from('stories').update(storyToRow(input)).eq('id', id)
+  if (error) throw error
+}
+
+export async function deleteStory(id: string): Promise<void> {
+  const { error } = await supabase.from('stories').delete().eq('id', id)
+  if (error) throw error
+}
