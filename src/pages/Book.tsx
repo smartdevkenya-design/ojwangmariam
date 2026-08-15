@@ -3,14 +3,31 @@ import { useSiteContent } from '../lib/content'
 
 function Book() {
   const { content } = useSiteContent()
-  const { title, subtitle, description, launchDetails, priceStandard, priceSponsor } =
-    content.book
+  const {
+    title,
+    subtitle,
+    description,
+    launchDetails,
+    priceStandard,
+    priceSponsor,
+    coverImageUrl,
+  } = content.book
 
   return (
     <section className="bg-offwhite">
       <div className="mx-auto max-w-[1200px] px-6 py-16">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
-          <div className="aspect-[3/4] w-full max-w-sm rounded border border-hairline bg-navy/5" />
+          {coverImageUrl ? (
+            <img
+              src={coverImageUrl}
+              alt={title}
+              className="aspect-[3/4] w-full max-w-sm rounded border border-hairline object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div className="aspect-[3/4] w-full max-w-sm rounded border border-hairline bg-navy/5" />
+          )}
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
               Featured Masterpiece

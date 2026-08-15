@@ -5,7 +5,7 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 function Hero() {
   const { content } = useSiteContent()
-  const { eyebrow, headline, subhead } = content.hero
+  const { eyebrow, headline, subhead, imageUrl } = content.hero
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'saving' | 'done' | 'error'>('idle')
@@ -29,6 +29,15 @@ function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-navy-deep">
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          fetchPriority="high"
+        />
+      )}
       <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,30,63,0.97)_35%,rgba(10,30,63,0.55)_75%)]" />
       <div className="absolute inset-y-0 right-0 hidden w-1/2 border-l border-navy-light bg-navy-light/40 md:block" />
       <div className="relative mx-auto max-w-[1200px] px-6 py-20 md:py-28">
@@ -135,11 +144,21 @@ function Highlights() {
               to={`/stories/${item.id}`}
               className="group flex flex-col overflow-hidden rounded border border-hairline bg-white shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="relative flex h-40 items-end bg-navy p-4">
-                <span className="absolute left-4 top-4 rounded-sm bg-crimson px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+              <div className="relative flex h-40 items-end overflow-hidden bg-navy p-4">
+                {item.imageUrl && (
+                  <img
+                    src={item.imageUrl}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/80 via-navy-deep/10 to-transparent" />
+                <span className="absolute left-4 top-4 z-10 rounded-sm bg-crimson px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
                   {item.tag}
                 </span>
-                <span className="text-sm text-white/60">{item.date}</span>
+                <span className="relative z-10 text-sm text-white/80">{item.date}</span>
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <h3 className="text-base font-semibold text-navy group-hover:text-crimson transition-colors">

@@ -29,6 +29,15 @@ function Story() {
           ← Back to Campaign Highlights
         </Link>
 
+        {story.imageUrl && (
+          <img
+            src={story.imageUrl}
+            alt={story.title}
+            className="mt-6 aspect-video w-full rounded object-cover"
+            loading="eager"
+          />
+        )}
+
         <span className="mt-6 inline-block rounded-sm bg-crimson px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
           {story.tag}
         </span>

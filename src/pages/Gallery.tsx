@@ -17,7 +17,13 @@ function Gallery() {
           {content.gallery.items.map((item, i) => (
             <figure key={i} className="overflow-hidden rounded border border-hairline">
               {item.url ? (
-                <img src={item.url} alt={item.caption} className="aspect-square w-full object-cover" />
+                <img
+                  src={item.url}
+                  alt={item.caption}
+                  className="aspect-square w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
               ) : (
                 <div className="aspect-square bg-navy/5" />
               )}

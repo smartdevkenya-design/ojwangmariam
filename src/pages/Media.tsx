@@ -19,6 +19,8 @@ function Media() {
                   src={i.imageUrl}
                   alt={i.title}
                   className="mb-4 aspect-video w-full rounded object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               )}
               <h3 className="text-sm font-semibold text-navy">{i.title}</h3>
