@@ -11,17 +11,26 @@ a different app.
 
 ## 2. Run the schema
 
-In your new project: **SQL Editor → New query**, paste the entire contents
-of `supabase/schema.sql` from this repo, and run it. This creates:
+In your new project: **SQL Editor → New query**. Run these two files
+**in order**, each as its own query:
 
-- `site_content` — one editable row holding the bio, book, manifesto, and
-  gallery content, pre-seeded with the current real content
-- `signups` — from the homepage "Join Now" form
-- `messages` — from the Contact page form
+1. `supabase/schema.sql` — creates:
+   - `site_content` — one editable row holding the bio, book, manifesto,
+     and gallery content, pre-seeded with the current real content
+   - `signups` — from the homepage "Join Now" form
+   - `messages` — from the Contact page form
+2. `supabase/migration_02_full_cms.sql` — adds:
+   - `hero` and `media` sections to `site_content`, plus extra fields
+     (headings/eyebrows/images) on the existing sections
+   - a `stories` table (the campaign highlight cards) so you can add,
+     edit, and delete stories from the admin panel instead of them being
+     hardcoded
+   - a public `site-images` storage bucket so the admin panel's image
+     uploader has somewhere to put photos
 
-All three have Row Level Security enabled: the public can read site
+All tables have Row Level Security enabled: the public can read site
 content and submit signups/messages, but only a logged-in admin can view
-signups/messages or edit site content.
+signups/messages, edit site content, manage stories, or upload images.
 
 ## 3. Create your admin login
 
@@ -59,15 +68,28 @@ Copy `.env.example` to `.env` and fill in the same two values, then
 
 ## What the admin dashboard can do
 
-- **Site Content** — edit the biography intro/cards, book details and
-  pricing, and manifesto slogan/pillars. Changes save to Supabase and the
-  public pages (`/about`, `/book`, `/manifesto`) reflect them immediately
-  on next load.
-- **Gallery** — add/remove photos by pasting image URLs (e.g. from
-  Cloudinary, Imgur, or any hosted image) with captions. Leave a URL blank
-  to keep the placeholder box.
+The dashboard is organized by page, matching the live site — pick a page,
+edit it, hit Save.
+
+- **Home** — hero eyebrow, headline, subhead, and background image.
+- **About** — page heading, intro, photo, and the four biography cards
+  (add/remove cards freely).
+- **Book** — cover image, title, subtitle, pricing, description, launch
+  details.
+- **Manifesto** — heading, slogan, and the pillars (add/remove freely).
+- **Media** — page heading and each media/impact item, each with its own
+  photo (add/remove items freely).
+- **Gallery** — upload photos with captions directly (add/remove freely).
+- **Stories** — the campaign highlight cards on the home page. Each story
+  has its own image, tag, title, summary, full body paragraphs
+  (add/remove paragraphs), and button. Add new stories or delete old ones
+  — each saves independently with its own Save/Delete buttons.
 - **Signups** — view everyone who submitted the homepage "Join Now" form.
 - **Messages** — view everything submitted through the Contact page form.
+
+**Images** are uploaded directly from your device — no need to host them
+elsewhere first. They're stored in the `site-images` bucket in your
+Supabase project and served publicly from there.
 
 Note: donations/contributions are still handled manually via the M-Pesa
 Paybill shown on the Contact page — this build doesn't process real
