@@ -2,21 +2,18 @@ import { useSiteContent } from '../lib/content'
 
 function Manifesto() {
   const { content } = useSiteContent()
-  const { slogan, sloganNote, pillars } = content.manifesto
+  const { eyebrow, heading, subheading, slogan, sloganNote, pillars } = content.manifesto
 
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1200px] px-6 py-16">
         <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
-          Kahawa West 2027
+          {eyebrow}
         </p>
         <h1 className="mt-2 max-w-2xl text-[28px] font-medium text-navy md:text-[32px]">
-          Siasa Safi, Maisha Bora
+          {heading}
         </h1>
-        <p className="mt-4 max-w-2xl text-muted">
-          Vying for Member of County Assembly (MCA) for Kahawa West Ward
-          under the Democracy for Citizens Party (DCP) banner.
-        </p>
+        <p className="mt-4 max-w-2xl text-muted">{subheading}</p>
         <p className="mt-4 max-w-2xl border-l-4 border-crimson pl-4 text-base italic text-navy">
           "{slogan}"
         </p>

@@ -2,14 +2,14 @@ import { useSiteContent } from '../lib/content'
 
 function About() {
   const { content } = useSiteContent()
-  const { intro, cards } = content.bio
+  const { eyebrow, heading, intro, cards } = content.bio
 
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-[1200px] px-6 py-16">
-        <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">About</p>
+        <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">{eyebrow}</p>
         <h1 className="mt-2 max-w-2xl text-[28px] font-medium text-navy md:text-[32px]">
-          The Journey of Resilience: Meet Ojwang Mariam
+          {heading}
         </h1>
         <p className="mt-4 max-w-2xl text-muted">{intro}</p>
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

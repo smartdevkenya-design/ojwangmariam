@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { stories } from '../data/stories'
+import { useSiteContent, useStories } from '../lib/content'
 import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 function Hero() {
+  const { content } = useSiteContent()
+  const { eyebrow, headline, subhead } = content.hero
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'saving' | 'done' | 'error'>('idle')
@@ -32,16 +34,12 @@ function Hero() {
       <div className="relative mx-auto max-w-[1200px] px-6 py-20 md:py-28">
         <div className="max-w-xl">
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
-            Join the campaign effort
+            {eyebrow}
           </p>
           <h1 className="mt-4 text-[38px] font-medium leading-[1.15] text-white md:text-[52px]">
-            Vision Beyond Sight: Transforming Kahawa West
+            {headline}
           </h1>
-          <p className="mt-4 text-white/70">
-            From the slums to a world-class university, breaking barriers as
-            a media pioneer, community leader, and your incoming 2027 MCA
-            for Kahawa West Ward.
-          </p>
+          <p className="mt-4 text-white/70">{subhead}</p>
 
           {status === 'done' ? (
             <p className="mt-8 rounded-full bg-white px-6 py-3 text-sm font-medium text-navy shadow-lg">
@@ -118,6 +116,7 @@ function CtaRibbon() {
 }
 
 function Highlights() {
+  const { stories } = useStories()
   return (
     <section className="bg-offwhite">
       <div className="mx-auto max-w-[1200px] px-6 py-16">

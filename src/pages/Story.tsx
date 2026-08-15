@@ -1,8 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
-import { stories } from '../data/stories'
+import { useStories } from '../lib/content'
 
 function Story() {
   const { id } = useParams<{ id: string }>()
+  const { stories } = useStories()
   const story = stories.find((s) => s.id === id)
 
   if (!story) {
