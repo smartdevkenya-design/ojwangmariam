@@ -228,7 +228,7 @@ function FloatingActions() {
       >
         📖
       </Link>
-      
+      <a
         href="tel:+254722731328"
         className="flex h-14 w-14 items-center justify-center bg-navy text-xl text-white shadow-lg hover:bg-navy-light"
         aria-label="Call the campaign"
