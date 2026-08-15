@@ -1,80 +1,85 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { stories } from '../data/stories'
+import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 function Hero() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'saving' | 'done' | 'error'>('idle')
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    if (!name.trim() || !email.trim()) return
-
-    const subject = encodeURIComponent('I want to join the campaign')
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\nI'd like to join the Ojwang Mariam campaign effort.`
-    )
-    window.location.href = `mailto:ojwangmariam@gmail.com?subject=${subject}&body=${body}`
-
-    setSubmitted(true)
+    if (!isSupabaseConfigured) {
+      setStatus('error')
+      return
+    }
+    setStatus('saving')
+    const { error } = await supabase.from('signups').insert({ name, email })
+    if (error) {
+      setStatus('error')
+      return
+    }
+    setStatus('done')
     setName('')
     setEmail('')
   }
 
   return (
-    <section className="relative flex min-h-[100dvh] items-center overflow-hidden bg-navy-deep [@media(max-height:500px)]:min-h-0">
-      <img
-        src="https://picsum.photos/seed/mariam-hero-city/1600/900"
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,21,41,0.75)_0%,rgba(6,21,41,0.85)_60%,rgba(6,21,41,0.97)_100%)]" />
-      <div className="relative mx-auto w-full max-w-[1200px] px-6 py-16 sm:py-24 md:py-32 [@media(max-height:500px)]:py-16">
-        <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-crimson">
-            Join the Campaign Effort
+    <section className="relative overflow-hidden bg-navy-deep">
+      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(10,30,63,0.97)_35%,rgba(10,30,63,0.55)_75%)]" />
+      <div className="absolute inset-y-0 right-0 hidden w-1/2 border-l border-navy-light bg-navy-light/40 md:block" />
+      <div className="relative mx-auto max-w-[1200px] px-6 py-20 md:py-28">
+        <div className="max-w-xl">
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
+            Join the campaign effort
           </p>
-          <h1 className="mt-4 text-[34px] font-bold leading-[1.1] text-white sm:text-[46px] md:text-[64px]">
-            We Can Transform Kahawa West Together!
+          <h1 className="mt-4 text-[38px] font-medium leading-[1.15] text-white md:text-[52px]">
+            Vision Beyond Sight: Transforming Kahawa West
           </h1>
-          <p className="mt-5 max-w-lg text-base text-white/75 sm:text-lg">
+          <p className="mt-4 text-white/70">
             From the slums to a world-class university, breaking barriers as
             a media pioneer, community leader, and your incoming 2027 MCA
             for Kahawa West Ward.
           </p>
 
-          <form
-            className="mt-8 flex max-w-xl flex-col gap-0 overflow-hidden rounded-lg bg-white shadow-xl sm:flex-row"
-            onSubmit={handleSubmit}
-          >
-            <input
-              type="text"
-              placeholder="Your Name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full border-b border-hairline bg-transparent px-5 py-4 text-sm text-ink outline-none sm:w-1/3 sm:border-b-0"
-            />
-            <input
-              type="email"
-              placeholder="Your Email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border-b border-hairline bg-transparent px-5 py-4 text-sm text-ink outline-none sm:w-1/3 sm:border-b-0 sm:border-l"
-            />
-            <button
-              type="submit"
-              className="w-full shrink-0 bg-crimson px-6 py-4 text-sm font-bold uppercase tracking-wide text-white hover:bg-crimson-dark sm:w-auto"
+          {status === 'done' ? (
+            <p className="mt-8 rounded-full bg-white px-6 py-3 text-sm font-medium text-navy shadow-lg">
+              Thanks for joining the movement — we'll be in touch.
+            </p>
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              className="mt-8 flex flex-col gap-3 rounded-full bg-white p-2 pl-4 shadow-lg sm:flex-row sm:items-center"
             >
-              Join Now
-            </button>
-          </form>
-          {submitted && (
-            <p className="mt-3 text-sm text-white/80">
-              Thanks! Your email client should be opening now — send the
-              message to complete signing up.
+              <input
+                type="text"
+                required
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full rounded-full border-0 bg-transparent px-2 py-2.5 text-sm text-ink outline-none sm:w-1/3"
+              />
+              <input
+                type="email"
+                required
+                placeholder="Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-full border-0 bg-transparent px-2 py-2.5 text-sm text-ink outline-none sm:w-1/3 sm:border-l sm:border-hairline"
+              />
+              <button
+                type="submit"
+                disabled={status === 'saving'}
+                className="w-full rounded-full bg-crimson px-5 py-2.5 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark disabled:opacity-60 sm:w-auto"
+              >
+                {status === 'saving' ? 'Joining…' : 'Join Now'}
+              </button>
+            </form>
+          )}
+          {status === 'error' && (
+            <p className="mt-3 text-sm text-crimson">
+              Something went wrong — please try again.
             </p>
           )}
         </div>
@@ -85,7 +90,7 @@ function Hero() {
 
 function CtaRibbon() {
   const items = [
-    { title: 'Volunteer', body: 'Get involved with the campaign', to: '/volunteer' },
+    { title: 'Volunteer', body: 'Get involved with the campaign', to: '/contact' },
     { title: 'Donate Now', body: 'Support via M-Pesa Paybill 247247', to: '/contact' },
     { title: 'Order the Book', body: 'Get your copy of Believe Become', to: '/book' },
   ]
@@ -115,7 +120,7 @@ function CtaRibbon() {
 function Highlights() {
   return (
     <section className="bg-offwhite">
-      <div className="mx-auto max-w-[1200px] px-6 py-10 sm:py-16">
+      <div className="mx-auto max-w-[1200px] px-6 py-16">
         <p className="text-center text-xs font-medium uppercase tracking-[0.15em] text-crimson">
           Welcome to the Campaign
         </p>
@@ -124,23 +129,18 @@ function Highlights() {
         </h2>
         <div className="mx-auto mt-3 h-0.5 w-10 bg-crimson" />
 
-        <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
           {stories.map((item) => (
             <Link
               key={item.id}
               to={`/stories/${item.id}`}
               className="group flex flex-col overflow-hidden rounded border border-hairline bg-white shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="relative flex aspect-[16/10] items-end overflow-hidden bg-navy p-4">
-                <img
-                  src={`https://picsum.photos/seed/story-${item.id}/600/400`}
-                  alt=""
-                  className="absolute inset-0 h-full w-full object-cover opacity-70"
-                />
+              <div className="relative flex h-40 items-end bg-navy p-4">
                 <span className="absolute left-4 top-4 rounded-sm bg-crimson px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
                   {item.tag}
                 </span>
-                <span className="relative text-sm text-white/90">{item.date}</span>
+                <span className="text-sm text-white/60">{item.date}</span>
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <h3 className="text-base font-semibold text-navy group-hover:text-crimson transition-colors">
@@ -169,20 +169,11 @@ function IssuesPanel() {
   ]
   return (
     <section className="grid grid-cols-1 md:grid-cols-2">
-      <Link
-        to="/manifesto"
-        className="group relative flex min-h-[320px] items-center justify-center overflow-hidden bg-navy-deep px-6 py-16"
-      >
-        <img
-          src="https://picsum.photos/seed/manifesto-panel/900/700"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover opacity-40 transition-opacity group-hover:opacity-50"
-        />
-        <div className="absolute inset-0 bg-navy-deep/50" />
-        <span className="relative text-center text-2xl font-medium uppercase tracking-[0.2em] text-white/90">
+      <div className="flex min-h-[320px] items-center justify-center bg-navy-deep px-6 py-16">
+        <span className="text-center text-2xl font-medium uppercase tracking-[0.2em] text-white/90">
           The Manifesto
         </span>
-      </Link>
+      </div>
       <div className="bg-navy">
         <ul className="divide-y divide-navy-light">
           {issues.map((issue) => (

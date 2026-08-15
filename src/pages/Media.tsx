@@ -15,25 +15,18 @@ function Media() {
   ]
   return (
     <section className="bg-offwhite">
-      <div className="mx-auto max-w-[1200px] px-6 py-10 sm:py-16">
+      <div className="mx-auto max-w-[1200px] px-6 py-16">
         <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">
           Media & Impact
         </p>
-        <h1 className="mt-2 max-w-2xl text-2xl font-medium text-navy sm:text-[28px] md:text-[32px]">
+        <h1 className="mt-2 max-w-2xl text-[28px] font-medium text-navy md:text-[32px]">
           Impact Beyond Politics
         </h1>
-        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 md:mt-12 lg:grid-cols-3">
-          {items.map((i, idx) => (
-            <div key={i.title} className="overflow-hidden rounded border-t-2 border-navy bg-white shadow-sm">
-              <img
-                src={`https://picsum.photos/seed/media-${idx}/500/300`}
-                alt=""
-                className="aspect-[16/9] w-full object-cover"
-              />
-              <div className="p-4 sm:p-5">
-                <h3 className="text-sm font-semibold text-navy sm:text-base">{i.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{i.body}</p>
-              </div>
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+          {items.map((i) => (
+            <div key={i.title} className="border-t-2 border-navy bg-white p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-navy">{i.title}</h3>
+              <p className="mt-2 text-sm text-muted">{i.body}</p>
             </div>
           ))}
         </div>
