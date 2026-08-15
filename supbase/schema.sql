@@ -28,7 +28,7 @@ values (
   '{
     "title": "Believe Become",
     "subtitle": "Vision Beyond Sight: From the Slums to a World-Class University",
-    "description": "A powerful memoir and motivational blueprint written to inspire global social impact. It delves deep into Mariam'"'"'s structural survival, mental resilience, and the strategies used to traverse intense physical and economic challenges — a roadmap for any youth looking to find their voice and change their community.",
+    "description": "A powerful memoir and motivational blueprint written to inspire global social impact. It delves deep into Mariam''s structural survival, mental resilience, and the strategies used to traverse intense physical and economic challenges — a roadmap for any youth looking to find their voice and change their community.",
     "launchDetails": "Officially unveiled at a grand launch on Friday, 7th August 2026 at the Kenya National Theatre, Nairobi, alongside its accompanying podcast network.",
     "priceStandard": "KSH 1,200",
     "priceSponsor": "KSH 1,200"
