@@ -32,6 +32,7 @@ interface Message {
 // Sidebar sections mirror the live site's pages one-to-one, so "select a
 // page, edit what's on it" maps directly onto the public nav.
 type Section =
+  | 'topbar'
   | 'home'
   | 'about'
   | 'book'
@@ -43,6 +44,7 @@ type Section =
   | 'messages'
 
 const PAGE_SECTIONS: { id: Section; label: string; hint: string }[] = [
+  { id: 'topbar', label: 'Top Banner', hint: 'Press line, phone, email' },
   { id: 'home', label: 'Home', hint: 'Hero banner' },
   { id: 'about', label: 'About', hint: 'Bio & cards' },
   { id: 'book', label: 'The Book', hint: 'Believe Become' },
@@ -64,6 +66,7 @@ function Admin() {
 
   const [content, setContent] = useState<SiteContent>(defaultContent)
   const [contentLoading, setContentLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState<string | null>(null)
 
@@ -73,11 +76,23 @@ function Admin() {
   useEffect(() => {
     supabase
       .from('site_content')
-      .select('hero, bio, book, manifesto, media, gallery')
+      .select('topbar, hero, bio, book, manifesto, media, gallery')
       .eq('id', 1)
       .single()
-      .then(({ data }) => {
-        if (data) setContent({ ...defaultContent, ...(data as Partial<SiteContent>) })
+      .then(({ data, error }) => {
+        if (data) {
+          // DB column is lowercase `topbar`; our content field is `topBar`.
+          const row = data as Record<string, unknown>
+          setContent({
+            ...defaultContent,
+            ...(row as Partial<SiteContent>),
+            topBar: (row.topbar as SiteContent['topBar']) ?? defaultContent.topBar,
+          })
+        } else if (error) {
+          setLoadError(
+            `Couldn't load saved content (${error.message}). Showing defaults — editing is safe, but Save may fail until the database is set up. See the migration note below.`
+          )
+        }
         setContentLoading(false)
       })
 
@@ -97,18 +112,44 @@ function Admin() {
   async function handleSave() {
     setSaving(true)
     setSaveMessage(null)
-    const { error } = await supabase
-      .from('site_content')
-      .update({
-        hero: content.hero,
-        bio: content.bio,
-        book: content.book,
-        manifesto: content.manifesto,
-        media: content.media,
-        gallery: content.gallery,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', 1)
+
+    const fullPayload = {
+      topbar: content.topBar,
+      hero: content.hero,
+      bio: content.bio,
+      book: content.book,
+      manifesto: content.manifesto,
+      media: content.media,
+      gallery: content.gallery,
+      updated_at: new Date().toISOString(),
+    }
+
+    let { error } = await supabase.from('site_content').update(fullPayload).eq('id', 1)
+
+    // If hero/media/topbar columns don't exist yet (migration not run),
+    // fall back to saving the fields that always exist so at least
+    // About/Book/Manifesto/Gallery edits (incl. photos) aren't lost.
+    if (error && /column .* does not exist/i.test(error.message)) {
+      const fallback = await supabase
+        .from('site_content')
+        .update({
+          bio: content.bio,
+          book: content.book,
+          manifesto: content.manifesto,
+          gallery: content.gallery,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', 1)
+      error = fallback.error
+      setSaving(false)
+      setSaveMessage(
+        error
+          ? `Error: ${error.message}`
+          : 'Saved About/Book/Manifesto/Gallery. Top Banner, Home hero, and Media need a database migration first — see the note below.'
+      )
+      return
+    }
+
     setSaving(false)
     setSaveMessage(error ? `Error: ${error.message}` : 'Saved — live site updated.')
   }
@@ -119,6 +160,7 @@ function Admin() {
   }
 
   const isContentSection =
+    section === 'topbar' ||
     section === 'home' ||
     section === 'about' ||
     section === 'book' ||
@@ -206,6 +248,14 @@ function Admin() {
               <p className="text-muted">Loading…</p>
             ) : (
               <>
+                {loadError && (
+                  <p className="mb-4 rounded border border-crimson/40 bg-crimson/5 px-4 py-3 text-sm text-crimson">
+                    {loadError}
+                  </p>
+                )}
+                {section === 'topbar' && (
+                  <TopBarEditor content={content} setContent={setContent} />
+                )}
                 {section === 'home' && <HomeEditor content={content} setContent={setContent} />}
                 {section === 'about' && <AboutEditor content={content} setContent={setContent} />}
                 {section === 'book' && <BookEditor content={content} setContent={setContent} />}
@@ -307,6 +357,36 @@ function AddButton({ onClick, label }: { onClick: () => void; label: string }) {
 type ContentEditorProps = {
   content: SiteContent
   setContent: (c: SiteContent) => void
+}
+
+// ── Top Banner (the thin strip at the very top of every page) ─────────
+
+function TopBarEditor({ content, setContent }: ContentEditorProps) {
+  const { topBar } = content
+  return (
+    <Card title="Top Banner">
+      <p className="text-xs text-muted">
+        This is the thin strip above the main navy nav bar, shown on every page.
+      </p>
+      <Field
+        label="Press line"
+        value={topBar.pressText}
+        onChange={(v) => setContent({ ...content, topBar: { ...topBar, pressText: v } })}
+      />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <Field
+          label="Phone number"
+          value={topBar.phone}
+          onChange={(v) => setContent({ ...content, topBar: { ...topBar, phone: v } })}
+        />
+        <Field
+          label="Email"
+          value={topBar.email}
+          onChange={(v) => setContent({ ...content, topBar: { ...topBar, email: v } })}
+        />
+      </div>
+    </Card>
+  )
 }
 
 // ── Home ──────────────────────────────────────────────────────────────
