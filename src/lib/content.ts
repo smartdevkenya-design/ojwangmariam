@@ -23,6 +23,11 @@ export interface MediaItem {
 }
 
 export interface SiteContent {
+  topBar: {
+    pressText: string
+    phone: string
+    email: string
+  }
   hero: {
     eyebrow: string
     headline: string
@@ -64,6 +69,11 @@ export interface SiteContent {
 }
 
 export const defaultContent: SiteContent = {
+  topBar: {
+    pressText: 'Believe Become — the memoir launches campaign-wide youth push',
+    phone: '+254 722 731 328',
+    email: 'ojwangmariam@gmail.com',
+  },
   hero: {
     eyebrow: 'Join the campaign effort',
     headline: 'Vision Beyond Sight: Transforming Kahawa West',
@@ -170,6 +180,7 @@ export const defaultContent: SiteContent = {
  */
 function mergeContent(row: Partial<SiteContent>): SiteContent {
   return {
+    topBar: { ...defaultContent.topBar, ...row.topBar },
     hero: { ...defaultContent.hero, ...row.hero },
     bio: { ...defaultContent.bio, ...row.bio, cards: row.bio?.cards ?? defaultContent.bio.cards },
     book: { ...defaultContent.book, ...row.book },
