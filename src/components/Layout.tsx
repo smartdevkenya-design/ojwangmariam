@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import { stories } from '../data/stories'
+import { useStories } from '../lib/content'
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -108,6 +108,7 @@ function Nav() {
 }
 
 function Footer() {
+  const { stories } = useStories()
   const quickLinks = [
     { to: '/', label: 'Home' },
     { to: '/about', label: 'About' },
@@ -174,7 +175,7 @@ function Footer() {
               Latest Highlights
             </h3>
             <ul className="mt-3 space-y-3">
-              {stories.map((s) => (
+              {stories.slice(0, 3).map((s) => (
                 <li key={s.id}>
                   <Link
                     to={`/stories/${s.id}`}
