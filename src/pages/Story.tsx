@@ -1,15 +1,15 @@
 import { Link, useParams } from 'react-router-dom'
-import { useStories } from '../lib/content'
+import { useSiteData } from '../context/SiteDataContext'
 
 function Story() {
   const { id } = useParams<{ id: string }>()
-  const { stories } = useStories()
+  const { stories } = useSiteData()
   const story = stories.find((s) => s.id === id)
 
   if (!story) {
     return (
       <section className="bg-white">
-        <div className="mx-auto max-w-2xl px-6 py-16">
+        <div className="mx-auto max-w-2xl px-6 py-10 sm:py-16">
           <p className="text-navy">Story not found.</p>
           <Link to="/" className="mt-4 inline-block text-sm font-medium uppercase tracking-wide text-crimson">
             ← Back to Home
@@ -21,22 +21,13 @@ function Story() {
 
   return (
     <section className="bg-offwhite">
-      <div className="mx-auto max-w-2xl px-6 py-16">
+      <div className="mx-auto max-w-2xl px-6 py-10 sm:py-16">
         <Link
           to="/"
           className="text-sm font-medium uppercase tracking-wide text-crimson hover:text-crimson-dark"
         >
           ← Back to Campaign Highlights
         </Link>
-
-        {story.imageUrl && (
-          <img
-            src={story.imageUrl}
-            alt={story.title}
-            className="mt-6 aspect-video w-full rounded object-cover"
-            loading="eager"
-          />
-        )}
 
         <span className="mt-6 inline-block rounded-sm bg-crimson px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
           {story.tag}
@@ -53,10 +44,10 @@ function Story() {
         </div>
 
         <Link
-          to={story.ctaHref}
+          to={story.cta_href}
           className="mt-8 inline-block rounded-full bg-crimson px-6 py-3 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark"
         >
-          {story.ctaLabel}
+          {story.cta_label}
         </Link>
       </div>
     </section>
