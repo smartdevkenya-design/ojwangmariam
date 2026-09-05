@@ -150,7 +150,7 @@ function StoriesPage() {
   const [creating, setCreating] = useState(false)
 
   const blank: Story = {
-    id: '',
+    id: crypto.randomUUID(),
     tag: '',
     title: '',
     date: '',
