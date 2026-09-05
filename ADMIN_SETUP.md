@@ -30,10 +30,13 @@ everything above, but only a logged-in admin can edit it.
 
 If you'd previously run the old `schema.sql` / `migration_02_full_cms.sql`
 files, this script also removes the `site_content`, `signups`, and
-`messages` tables and the `site-images` bucket they created — none of
-that is used by the current code, and it was the reason edits weren't
-sticking (the admin panel and the live site were reading from tables
-that didn't match what those older files created).
+`messages` tables they created — none of that is used by the current
+code, and it was the reason edits weren't sticking (the admin panel and
+the live site were reading from tables that didn't match what those
+older files created). It leaves the old `site-images` storage bucket in
+place (Supabase blocks deleting storage tables via SQL) — it's unused
+and harmless; delete it manually from Storage in the dashboard if you'd
+like it gone.
 
 ## 3. Create your admin login
 
