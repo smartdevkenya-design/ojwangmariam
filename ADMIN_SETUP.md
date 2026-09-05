@@ -1,36 +1,39 @@
 # Admin Setup Guide
 
-The admin dashboard needs a Supabase project to store content, signups, and
-messages, plus a login. Follow these steps once.
+The admin dashboard needs a Supabase project to store content and images,
+plus a login. Follow these steps once.
 
-## 1. Create a Supabase project
+## 1. Create (or reuse) a Supabase project
 
-Go to https://supabase.com, create a new project (free tier is fine). This
-should be a **new, separate project** from your SmartDev ERP one — this is
-a different app.
+Go to https://supabase.com and create a project (free tier is fine), or
+use the one you already created for this site — this should be a
+**separate project from your SmartDev ERP one**.
 
 ## 2. Run the schema
 
-In your new project: **SQL Editor → New query**. Run these two files
-**in order**, each as its own query:
+In your project: **SQL Editor → New query**, paste in the full contents
+of `supabase/schema.sql`, and run it. It's a single file and safe to
+re-run. It creates:
 
-1. `supabase/schema.sql` — creates:
-   - `site_content` — one editable row holding the bio, book, manifesto,
-     and gallery content, pre-seeded with the current real content
-   - `signups` — from the homepage "Join Now" form
-   - `messages` — from the Contact page form
-2. `supabase/migration_02_full_cms.sql` — adds:
-   - `hero` and `media` sections to `site_content`, plus extra fields
-     (headings/eyebrows/images) on the existing sections
-   - a `stories` table (the campaign highlight cards) so you can add,
-     edit, and delete stories from the admin panel instead of them being
-     hardcoded
-   - a public `site-images` storage bucket so the admin panel's image
-     uploader has somewhere to put photos
+- `site_settings` — one row holding the logo, nav menu, contact details,
+  footer, and M-Pesa info
+- `page_content` — one row per built-in page (home, about, book,
+  manifesto, media, gallery, volunteer, contact), pre-seeded with the
+  current live content
+- `stories` — the campaign highlight cards (add/edit/delete from admin)
+- `gallery_images` — the Gallery page photos
+- `custom_pages` — any extra pages you create from the admin panel
+- a public `media` storage bucket for the admin panel's image uploader
 
-All tables have Row Level Security enabled: the public can read site
-content and submit signups/messages, but only a logged-in admin can view
-signups/messages, edit site content, manage stories, or upload images.
+All tables have Row Level Security enabled: the public can read
+everything above, but only a logged-in admin can edit it.
+
+If you'd previously run the old `schema.sql` / `migration_02_full_cms.sql`
+files, this script also removes the `site_content`, `signups`, and
+`messages` tables and the `site-images` bucket they created — none of
+that is used by the current code, and it was the reason edits weren't
+sticking (the admin panel and the live site were reading from tables
+that didn't match what those older files created).
 
 ## 3. Create your admin login
 
@@ -47,19 +50,39 @@ exist — there's no public sign-up form, so this is the sole way in.
 
 ## 5. Add them to GitHub
 
-In the `ojwangmariam` repo: **Settings → Secrets and variables → Actions →
-New repository secret**. Add two secrets:
+In the repo: **Settings → Secrets and variables → Actions → New
+repository secret**. Add two secrets:
 
 - `VITE_SUPABASE_URL` → your Project URL
 - `VITE_SUPABASE_ANON_KEY` → your anon public key
 
-The deploy workflow already reads these and bakes them into the build.
+The deploy workflow reads these and bakes them into the build. **This is
+the step that most often gets missed** — without it, the production
+build has no way to talk to Supabase at all, so it silently falls back
+to the built-in default content on every visit, no matter what you've
+saved in the admin panel.
 
 ## 6. Push and deploy
 
 Push this update to `main` as usual. Once the workflow finishes, go to
-`https://smartdevkenya-design.github.io/ojwangmariam/admin/login` and sign
-in with the account from step 3.
+`https://<your-site>/admin/login` and sign in with the account from
+step 3.
+
+## How content actually gets from admin → live site
+
+There's no separate "publish" step. When you hit Save in the admin
+panel, it writes straight to Supabase. The live site reads straight
+from Supabase every time a page loads. So:
+
+- **Content edits** (text, images, stories, gallery, settings, colors) —
+  show up on refresh, immediately. No rebuild needed.
+- **Code changes** (anything in `src/`) — only go live after you push to
+  `main` and the GitHub Actions workflow finishes (~1-2 minutes).
+
+If a content edit isn't showing up after a refresh, it means either (a)
+the save itself failed silently — check the browser console for a
+Supabase error, or (b) the deployed build still isn't configured with
+the secrets from step 5.
 
 ## Local development
 
@@ -68,30 +91,31 @@ Copy `.env.example` to `.env` and fill in the same two values, then
 
 ## What the admin dashboard can do
 
-The dashboard is organized by page, matching the live site — pick a page,
-edit it, hit Save.
+The dashboard is organized by page, matching the live site — pick a
+page, edit it, hit Save.
 
-- **Home** — hero eyebrow, headline, subhead, and background image.
-- **About** — page heading, intro, photo, and the four biography cards
-  (add/remove cards freely).
-- **Book** — cover image, title, subtitle, pricing, description, launch
-  details.
-- **Manifesto** — heading, slogan, and the pillars (add/remove freely).
-- **Media** — page heading and each media/impact item, each with its own
-  photo (add/remove items freely).
-- **Gallery** — upload photos with captions directly (add/remove freely).
-- **Stories** — the campaign highlight cards on the home page. Each story
-  has its own image, tag, title, summary, full body paragraphs
-  (add/remove paragraphs), and button. Add new stories or delete old ones
-  — each saves independently with its own Save/Delete buttons.
-- **Signups** — view everyone who submitted the homepage "Join Now" form.
-- **Messages** — view everything submitted through the Contact page form.
+- **Site Settings & Logo** — logo, nav menu, contact details, footer,
+  M-Pesa info.
+- **Colors & Theme** — site-wide brand colors, applied instantly.
+- **Home / About / Book / Manifesto / Media / Gallery / Volunteer /
+  Contact** — each page's text and images.
+- **Stories / News** — the campaign highlight cards on the home page.
+  Each has its own image, tag, title, summary, full body paragraphs
+  (add/remove freely), and button. Add new stories or delete old ones.
+- **Gallery Photos** — upload photos with captions directly
+  (add/remove freely).
+- **Extra / Custom Pages** — create brand-new pages beyond the built-in
+  ones, made of heading/text/image/button blocks, live at
+  `yoursite.com/your-slug`.
 
 **Images** are uploaded directly from your device — no need to host them
-elsewhere first. They're stored in the `site-images` bucket in your
-Supabase project and served publicly from there.
+elsewhere first. They're stored in the `media` bucket in your Supabase
+project and served publicly from there.
 
 Note: donations/contributions are still handled manually via the M-Pesa
 Paybill shown on the Contact page — this build doesn't process real
 payments automatically, since that needs a payment gateway integration
-(e.g. Daraja API), which is a separate project if you want it.
+(e.g. Daraja API), which is a separate project if you want it. Likewise,
+the "Join Now" and Contact forms open an email draft (`mailto:`) rather
+than saving to a database — there's no signups/messages list in admin
+because nothing currently writes to one.

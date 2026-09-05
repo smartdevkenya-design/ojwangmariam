@@ -1,6 +1,4 @@
-node_modules
-dist
-dist-ssr
-*.local
-.DS_Store
-.env
+# Copy this file to .env for local development (npm run dev).
+# Find these values in your Supabase project: Settings → API.
+VITE_SUPABASE_URL=https://lirdvegqnmmfefwqalju.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpcmR2ZWdxbm1tZmVmd3FhbGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3NjE0MDUsImV4cCI6MjEwMjMzNzQwNX0.JLvv6ZvVdP_f4VmG2Myg-4J2IryCBbhYAe-eYmsaqQk
