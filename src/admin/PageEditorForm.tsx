@@ -95,15 +95,20 @@ function ArrayFieldEditor({
 function PageEditorForm({ page }: { page: string }) {
   const schema = PAGE_SCHEMAS[page]
   const defaults = PAGE_DEFAULTS[page] as Record<string, unknown>
-  const { pageContent, refetch } = useSiteData()
+  const { pageContent, refetch, loading } = useSiteData()
   const [data, setData] = useState<Record<string, unknown>>({ ...defaults, ...(pageContent[page] as object) })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
+  // On mount / refresh, the real content hasn't arrived from Supabase yet,
+  // so this initializes with defaults only. Re-sync once `loading` flips to
+  // false so the form shows your actual saved content instead of getting
+  // stuck on the mock/default text.
   useEffect(() => {
+    if (loading) return
     setData({ ...defaults, ...(pageContent[page] as object) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page])
+  }, [page, loading])
 
   function set(key: string, value: unknown) {
     setData((d) => ({ ...d, [key]: value }))
@@ -113,7 +118,14 @@ function PageEditorForm({ page }: { page: string }) {
   async function handleSave() {
     if (!supabase) return
     setSaving(true)
-    await supabase.from('page_content').upsert({ page, data, updated_at: new Date().toISOString() })
+    const { error } = await supabase
+      .from('page_content')
+      .upsert({ page, data, updated_at: new Date().toISOString() })
+    if (error) {
+      setSaving(false)
+      alert(`Save failed: ${error.message}`)
+      return
+    }
     await refetch()
     setSaving(false)
     setSaved(true)
