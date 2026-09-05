@@ -28,27 +28,32 @@ drop table if exists messages cascade;
 
 -- ── 1. site_settings — single row: logo, nav, footer, contact, theme ──
 create table if not exists site_settings (
-  id int primary key default 1,
-  site_title text not null default '',
-  logo_line1 text not null default '',
-  logo_line2 text not null default '',
-  logo_image_url text,
-  press_banner_text text not null default '',
-  phone text not null default '',
-  email text not null default '',
-  address text not null default '',
-  footer_about text not null default '',
-  footer_copyright text not null default '',
-  footer_tagline text not null default '',
-  footer_tags jsonb not null default '[]'::jsonb,
-  mpesa_paybill text not null default '',
-  mpesa_account text not null default '',
-  mpesa_account_name text not null default '',
-  nav_links jsonb not null default '[]'::jsonb,
-  theme jsonb not null default '{}'::jsonb,
-  updated_at timestamptz not null default now(),
-  constraint site_settings_single_row check (id = 1)
+  id int primary key default 1
 );
+
+-- Defensive column patch-up: earlier partial script runs may have created
+-- this table with only some columns. These are safe no-ops if a column
+-- already exists, and guarantee the full shape either way.
+alter table site_settings add column if not exists site_title text not null default '';
+alter table site_settings add column if not exists logo_line1 text not null default '';
+alter table site_settings add column if not exists logo_line2 text not null default '';
+alter table site_settings add column if not exists logo_image_url text;
+alter table site_settings add column if not exists press_banner_text text not null default '';
+alter table site_settings add column if not exists phone text not null default '';
+alter table site_settings add column if not exists email text not null default '';
+alter table site_settings add column if not exists address text not null default '';
+alter table site_settings add column if not exists footer_about text not null default '';
+alter table site_settings add column if not exists footer_copyright text not null default '';
+alter table site_settings add column if not exists footer_tagline text not null default '';
+alter table site_settings add column if not exists footer_tags jsonb not null default '[]'::jsonb;
+alter table site_settings add column if not exists mpesa_paybill text not null default '';
+alter table site_settings add column if not exists mpesa_account text not null default '';
+alter table site_settings add column if not exists mpesa_account_name text not null default '';
+alter table site_settings add column if not exists nav_links jsonb not null default '[]'::jsonb;
+alter table site_settings add column if not exists theme jsonb not null default '{}'::jsonb;
+alter table site_settings add column if not exists updated_at timestamptz not null default now();
+alter table site_settings drop constraint if exists site_settings_single_row;
+alter table site_settings add constraint site_settings_single_row check (id = 1);
 
 insert into site_settings (
   id, site_title, logo_line1, logo_line2, logo_image_url, press_banner_text,
@@ -98,10 +103,10 @@ create policy "Authenticated can update site settings" on site_settings for upda
 
 -- ── 2. page_content — one JSON row per built-in page ──────────────────
 create table if not exists page_content (
-  page text primary key,
-  data jsonb not null default '{}'::jsonb,
-  updated_at timestamptz not null default now()
+  page text primary key
 );
+alter table page_content add column if not exists data jsonb not null default '{}'::jsonb;
+alter table page_content add column if not exists updated_at timestamptz not null default now();
 
 insert into page_content (page, data) values
 ('home', '{
@@ -261,12 +266,12 @@ insert into stories (tag, title, date, summary, paragraphs, cta_label, cta_href,
 
 -- ── 4. gallery_images — Gallery page photos ────────────────────────────
 create table if not exists gallery_images (
-  id uuid primary key default gen_random_uuid(),
-  url text not null,
-  caption text not null default '',
-  sort_order int not null default 0,
-  created_at timestamptz not null default now()
+  id uuid primary key default gen_random_uuid()
 );
+alter table gallery_images add column if not exists url text not null default '';
+alter table gallery_images add column if not exists caption text not null default '';
+alter table gallery_images add column if not exists sort_order int not null default 0;
+alter table gallery_images add column if not exists created_at timestamptz not null default now();
 
 alter table gallery_images enable row level security;
 drop policy if exists "Anyone can read gallery images" on gallery_images;
@@ -277,15 +282,23 @@ create policy "Authenticated can manage gallery images" on gallery_images for al
 
 -- ── 5. custom_pages — admin-created extra pages (e.g. /events) ────────
 create table if not exists custom_pages (
-  id uuid primary key default gen_random_uuid(),
-  slug text not null unique,
-  title text not null default '',
-  nav_label text not null default '',
-  show_in_nav boolean not null default true,
-  sort_order int not null default 0,
-  sections jsonb not null default '[]'::jsonb,
-  updated_at timestamptz not null default now()
+  id uuid primary key default gen_random_uuid()
 );
+alter table custom_pages add column if not exists slug text not null default '';
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'custom_pages_slug_key'
+  ) then
+    alter table custom_pages add constraint custom_pages_slug_key unique (slug);
+  end if;
+end $$;
+alter table custom_pages add column if not exists title text not null default '';
+alter table custom_pages add column if not exists nav_label text not null default '';
+alter table custom_pages add column if not exists show_in_nav boolean not null default true;
+alter table custom_pages add column if not exists sort_order int not null default 0;
+alter table custom_pages add column if not exists sections jsonb not null default '[]'::jsonb;
+alter table custom_pages add column if not exists updated_at timestamptz not null default now();
 
 alter table custom_pages enable row level security;
 drop policy if exists "Anyone can read custom pages" on custom_pages;
@@ -313,3 +326,10 @@ create policy "Authenticated update media" on storage.objects for update
 drop policy if exists "Authenticated delete media" on storage.objects;
 create policy "Authenticated delete media" on storage.objects for delete
   using (bucket_id = 'media' and auth.role() = 'authenticated');
+
+-- ── 7. Force PostgREST to pick up the schema changes immediately ──────
+-- Without this, the API layer can keep serving a stale cached schema for
+-- a short while after DDL changes, producing errors like "Could not find
+-- the 'x' column of 'y' in the schema cache" even though the column now
+-- exists.
+notify pgrst, 'reload schema';
