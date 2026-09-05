@@ -37,7 +37,12 @@ function StoryForm({ story, onDone }: { story: Story; onDone: () => void }) {
   async function handleSave() {
     if (!supabase) return
     setSaving(true)
-    await supabase.from('stories').upsert(data)
+    const { error } = await supabase.from('stories').upsert(data)
+    if (error) {
+      setSaving(false)
+      alert(`Save failed: ${error.message}`)
+      return
+    }
     await refetch()
     setSaving(false)
     setSaved(true)
@@ -57,11 +62,7 @@ function StoryForm({ story, onDone }: { story: Story; onDone: () => void }) {
         <Field label="Title">
           <TextInput
             value={data.title}
-            onChange={(e) => {
-              const title = e.target.value
-              set('title', title)
-              if (!story.title) set('id', slugify(title))
-            }}
+            onChange={(e) => set('title', e.target.value)}
           />
         </Field>
         <Field label="Tag (e.g. Book Launch)">
