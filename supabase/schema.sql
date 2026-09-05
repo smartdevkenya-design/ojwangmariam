@@ -90,7 +90,9 @@ insert into site_settings (
 on conflict (id) do nothing;
 
 alter table site_settings enable row level security;
+drop policy if exists "Anyone can read site settings" on site_settings;
 create policy "Anyone can read site settings" on site_settings for select using (true);
+drop policy if exists "Authenticated can update site settings" on site_settings;
 create policy "Authenticated can update site settings" on site_settings for update
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
@@ -194,7 +196,9 @@ insert into page_content (page, data) values
 on conflict (page) do nothing;
 
 alter table page_content enable row level security;
+drop policy if exists "Anyone can read page content" on page_content;
 create policy "Anyone can read page content" on page_content for select using (true);
+drop policy if exists "Authenticated can manage page content" on page_content;
 create policy "Authenticated can manage page content" on page_content for all
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
@@ -217,7 +221,9 @@ create table stories (
 );
 
 alter table stories enable row level security;
+drop policy if exists "Anyone can read stories" on stories;
 create policy "Anyone can read stories" on stories for select using (true);
+drop policy if exists "Authenticated can manage stories" on stories;
 create policy "Authenticated can manage stories" on stories for all
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
@@ -263,7 +269,9 @@ create table if not exists gallery_images (
 );
 
 alter table gallery_images enable row level security;
+drop policy if exists "Anyone can read gallery images" on gallery_images;
 create policy "Anyone can read gallery images" on gallery_images for select using (true);
+drop policy if exists "Authenticated can manage gallery images" on gallery_images;
 create policy "Authenticated can manage gallery images" on gallery_images for all
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
@@ -280,7 +288,9 @@ create table if not exists custom_pages (
 );
 
 alter table custom_pages enable row level security;
+drop policy if exists "Anyone can read custom pages" on custom_pages;
 create policy "Anyone can read custom pages" on custom_pages for select using (true);
+drop policy if exists "Authenticated can manage custom pages" on custom_pages;
 create policy "Authenticated can manage custom pages" on custom_pages for all
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
@@ -291,11 +301,15 @@ insert into storage.buckets (id, name, public)
 values ('media', 'media', true)
 on conflict (id) do nothing;
 
+drop policy if exists "Public read media" on storage.objects;
 create policy "Public read media" on storage.objects for select
   using (bucket_id = 'media');
+drop policy if exists "Authenticated upload media" on storage.objects;
 create policy "Authenticated upload media" on storage.objects for insert
   with check (bucket_id = 'media' and auth.role() = 'authenticated');
+drop policy if exists "Authenticated update media" on storage.objects;
 create policy "Authenticated update media" on storage.objects for update
   using (bucket_id = 'media' and auth.role() = 'authenticated');
+drop policy if exists "Authenticated delete media" on storage.objects;
 create policy "Authenticated delete media" on storage.objects for delete
   using (bucket_id = 'media' and auth.role() = 'authenticated');
