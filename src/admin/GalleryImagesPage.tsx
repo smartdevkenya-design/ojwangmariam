@@ -12,26 +12,35 @@ function GalleryImagesPage() {
   async function addImage() {
     if (!supabase || !newUrl.trim()) return
     setBusy(true)
-    await supabase.from('gallery_images').insert({
+    const { error } = await supabase.from('gallery_images').insert({
       url: newUrl,
       caption: newCaption,
       sort_order: galleryImages.length,
     })
+    setBusy(false)
+    if (error) {
+      alert(`Add failed: ${error.message}`)
+      return
+    }
     setNewUrl('')
     setNewCaption('')
     await refetch()
-    setBusy(false)
   }
 
   async function updateCaption(id: string, caption: string) {
     if (!supabase) return
-    await supabase.from('gallery_images').update({ caption }).eq('id', id)
+    const { error } = await supabase.from('gallery_images').update({ caption }).eq('id', id)
+    if (error) alert(`Update failed: ${error.message}`)
   }
 
   async function removeImage(id: string) {
     if (!supabase) return
     if (!confirm('Remove this photo?')) return
-    await supabase.from('gallery_images').delete().eq('id', id)
+    const { error } = await supabase.from('gallery_images').delete().eq('id', id)
+    if (error) {
+      alert(`Remove failed: ${error.message}`)
+      return
+    }
     await refetch()
   }
 

@@ -44,9 +44,25 @@ function SiteSettingsPage() {
   async function handleSave() {
     if (!supabase) return
     setSaving(true)
-    await supabase.from('site_settings').update({ ...data, updated_at: new Date().toISOString() }).eq('id', 1)
-    await refetch()
+    const { data: rows, error } = await supabase
+      .from('site_settings')
+      .update({ ...data, updated_at: new Date().toISOString() })
+      .eq('id', 1)
+      .select()
     setSaving(false)
+    if (error) {
+      alert(`Save failed: ${error.message}`)
+      return
+    }
+    if (!rows || rows.length === 0) {
+      alert(
+        'Save didn\'t stick: the database rejected the update silently (0 rows changed). ' +
+          'This usually means your admin login session isn\'t active, or the site_settings row ' +
+          'is missing — try signing out and back in, or re-check supabase/schema.sql was run.'
+      )
+      return
+    }
+    await refetch()
     setSaved(true)
   }
 
