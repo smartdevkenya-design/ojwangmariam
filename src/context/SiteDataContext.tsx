@@ -64,6 +64,19 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
       supabase.from('custom_pages').select('*').order('sort_order', { ascending: true }),
     ])
 
+    // Log (rather than silently swallow) any query error, so a schema
+    // mismatch or RLS issue shows up in the browser console instead of
+    // just quietly falling back to default content with no clue why.
+    for (const [label, res] of [
+      ['site_settings', settingsRes],
+      ['page_content', pageRes],
+      ['stories', storiesRes],
+      ['gallery_images', galleryRes],
+      ['custom_pages', customRes],
+    ] as const) {
+      if (res.error) console.error(`[SiteDataContext] Failed to load "${label}":`, res.error.message)
+    }
+
     if (settingsRes.data) setSettings(settingsRes.data as SiteSettings)
     if (pageRes.data) {
       const merged: Record<string, unknown> = {}
