@@ -12,6 +12,21 @@ function slugify(s: string) {
     .replace(/(^-|-$)/g, '')
 }
 
+// crypto.randomUUID() only exists in secure contexts (HTTPS). This site is
+// sometimes loaded over plain http://, where that function doesn't exist at
+// all and calling it throws immediately, crashing the whole page. This
+// fallback works everywhere.
+function generateId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
 function StoryForm({ story, onDone }: { story: Story; onDone: () => void }) {
   const { refetch } = useSiteData()
   const [data, setData] = useState<Story>(story)
@@ -150,7 +165,7 @@ function StoriesPage() {
   const [creating, setCreating] = useState(false)
 
   const blank: Story = {
-    id: crypto.randomUUID(),
+    id: generateId(),
     tag: '',
     title: '',
     date: '',
