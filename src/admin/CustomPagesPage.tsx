@@ -4,6 +4,19 @@ import { useSiteData } from '../context/SiteDataContext'
 import type { CustomPage, SectionBlock } from '../lib/types'
 import { Field, ImageField, TextArea, TextInput } from './fields'
 
+// crypto.randomUUID() only exists in secure contexts (HTTPS) and throws on
+// plain http:// pages. This fallback works everywhere.
+function generateId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
 function slugify(s: string) {
   return s
     .toLowerCase()
@@ -196,7 +209,7 @@ function CustomPagesPage() {
   const [creating, setCreating] = useState(false)
 
   const blank: CustomPage = {
-    id: crypto.randomUUID(),
+    id: generateId(),
     slug: '',
     title: '',
     nav_label: '',
