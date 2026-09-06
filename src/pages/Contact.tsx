@@ -3,7 +3,13 @@ import { useSiteData, usePageContent } from '../context/SiteDataContext'
 import type { ContactContent } from '../lib/types'
 import { supabase } from '../lib/supabase'
 
-function ContactForm({ ctaLabel }: { ctaLabel: string }) {
+function ContactForm({
+  ctaLabel,
+  mpesa,
+}: {
+  ctaLabel: string
+  mpesa: { paybill: string; account: string; accountName: string }
+}) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -38,8 +44,22 @@ function ContactForm({ ctaLabel }: { ctaLabel: string }) {
 
   if (submitted) {
     return (
-      <div className="mt-10 rounded border border-white/20 bg-navy p-6">
+      <div className="mt-10 max-w-xl rounded border border-white/20 bg-navy p-6">
         <p className="text-white">Thanks — your message has been received. We'll be in touch soon.</p>
+        <div className="mt-4 rounded border border-crimson/40 bg-navy-deep p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-white/60">
+            Want to support the campaign directly?
+          </p>
+          <p className="mt-2 text-sm text-white/70">
+            M-Pesa Paybill: <span className="text-white">{mpesa.paybill}</span>
+          </p>
+          <p className="mt-1 text-sm text-white/70">
+            Account Number: <span className="text-white">{mpesa.account}</span>
+          </p>
+          <p className="mt-1 text-sm text-white/70">
+            Account Name: <span className="text-white">{mpesa.accountName}</span>
+          </p>
+        </div>
       </div>
     )
   }
@@ -113,11 +133,11 @@ function Contact() {
               </a>
             </p>
           </div>
-          <div>
+          <div id="donate" className="scroll-mt-24">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-white/60">
               Campaign & Book Financials
             </h3>
-            <div className="mt-3 rounded border border-navy-light bg-navy p-4">
+            <div className="mt-3 rounded border-2 border-crimson/50 bg-navy p-4">
               <p className="text-sm text-white/70">
                 M-Pesa Paybill: <span className="text-white">{settings.mpesa_paybill}</span>
               </p>
@@ -130,7 +150,14 @@ function Contact() {
             </div>
           </div>
         </div>
-        <ContactForm ctaLabel={content.cta_label} />
+        <ContactForm
+          ctaLabel={content.cta_label}
+          mpesa={{
+            paybill: settings.mpesa_paybill,
+            account: settings.mpesa_account,
+            accountName: settings.mpesa_account_name,
+          }}
+        />
       </div>
     </section>
   )

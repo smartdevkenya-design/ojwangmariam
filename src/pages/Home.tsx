@@ -5,6 +5,7 @@ import type { HomeContent } from '../lib/types'
 import { supabase } from '../lib/supabase'
 
 function FloatingJoinBar() {
+  const { settings } = useSiteData()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -75,6 +76,17 @@ function FloatingJoinBar() {
             </button>
             {error && <span className="text-xs text-crimson sm:ml-2">{error}</span>}
           </form>
+        )}
+        {submitted && (
+          <p className="flex-1 text-xs text-muted sm:text-sm">
+            Want to support financially too? M-Pesa Paybill{' '}
+            <span className="font-semibold text-navy">{settings.mpesa_paybill}</span>, Account{' '}
+            <span className="font-semibold text-navy">{settings.mpesa_account}</span> — or{' '}
+            <Link to="/contact#donate" className="font-semibold text-crimson hover:underline">
+              see full details
+            </Link>
+            .
+          </p>
         )}
         <button
           type="button"
