@@ -5,7 +5,7 @@ import type { SiteSettings } from '../lib/types'
 import { Field, ImageField, SaveBar, TextArea, TextInput } from './fields'
 
 function SiteSettingsPage() {
-  const { settings, refetch } = useSiteData()
+  const { settings, refetch, loading } = useSiteData()
   const [data, setData] = useState<SiteSettings>(settings)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -46,7 +46,7 @@ function SiteSettingsPage() {
     setSaving(true)
     const { data: rows, error } = await supabase
       .from('site_settings')
-      .update({ ...data, updated_at: new Date().toISOString() })
+      .update(data)
       .eq('id', 1)
       .select()
     setSaving(false)
@@ -64,6 +64,15 @@ function SiteSettingsPage() {
     }
     await refetch()
     setSaved(true)
+  }
+
+  if (loading) {
+    return (
+      <div>
+        <h1 className="text-xl font-semibold text-navy">Site Settings & Logo</h1>
+        <p className="mt-6 text-sm text-muted">Loading your saved settings…</p>
+      </div>
+    )
   }
 
   return (
