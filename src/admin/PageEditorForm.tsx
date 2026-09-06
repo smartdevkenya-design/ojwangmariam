@@ -131,6 +131,19 @@ function PageEditorForm({ page }: { page: string }) {
     setSaved(true)
   }
 
+  // Don't render the form (with its defaults-only initial state) until the
+  // real content has actually loaded from Supabase — otherwise there's a
+  // moment where the mock/default text is visible and editable, which looks
+  // like your saved edits reverted.
+  if (loading) {
+    return (
+      <div>
+        <h1 className="text-xl font-semibold text-navy">{PAGE_TITLES[page]}</h1>
+        <p className="mt-6 text-sm text-muted">Loading your saved content…</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1 className="text-xl font-semibold text-navy">{PAGE_TITLES[page]}</h1>
