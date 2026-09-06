@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSiteData } from '../context/SiteDataContext'
-import { supabaseConfigured } from '../lib/supabase'
+import { supabase, supabaseConfigured } from '../lib/supabase'
 
 const cards = [
   { to: '/admin/settings', title: 'Site Settings & Logo', body: 'Logo, nav menu, contact details, footer, M-Pesa info.' },
@@ -9,10 +10,21 @@ const cards = [
   { to: '/admin/stories', title: 'Stories / News', body: 'Add, edit, or remove campaign highlight stories.' },
   { to: '/admin/gallery-images', title: 'Gallery Photos', body: 'Manage the photo gallery.' },
   { to: '/admin/custom-pages', title: 'Extra / Custom Pages', body: 'Create brand-new pages beyond the defaults.' },
+  { to: '/admin/messages', title: 'Messages & Signups', body: 'Everyone who joined or sent a message from the site.' },
 ]
 
 function Overview() {
   const { stories, galleryImages, customPages } = useSiteData()
+  const [messageCount, setMessageCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!supabase) return
+    supabase
+      .from('contact_messages')
+      .select('id', { count: 'exact', head: true })
+      .then(({ count }) => setMessageCount(count ?? 0))
+  }, [])
+
   return (
     <div>
       <h1 className="text-xl font-semibold text-navy">Welcome back</h1>
@@ -24,7 +36,7 @@ function Overview() {
         </p>
       )}
 
-      <div className="mt-6 grid grid-cols-3 gap-4 text-center">
+      <div className="mt-6 grid grid-cols-2 gap-4 text-center sm:grid-cols-4">
         <div className="rounded border border-hairline bg-white p-4">
           <p className="text-2xl font-semibold text-navy">{stories.length}</p>
           <p className="text-xs text-muted">Stories</p>
@@ -37,6 +49,10 @@ function Overview() {
           <p className="text-2xl font-semibold text-navy">{customPages.length}</p>
           <p className="text-xs text-muted">Extra pages</p>
         </div>
+        <Link to="/admin/messages" className="rounded border border-hairline bg-white p-4 hover:border-crimson">
+          <p className="text-2xl font-semibold text-navy">{messageCount ?? '–'}</p>
+          <p className="text-xs text-muted">Messages & signups</p>
+        </Link>
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">

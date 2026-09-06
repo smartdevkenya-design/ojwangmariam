@@ -16,6 +16,7 @@ const links = [
   { to: '/admin/stories', label: 'Stories / News' },
   { to: '/admin/gallery-images', label: 'Gallery Photos' },
   { to: '/admin/custom-pages', label: 'Extra / Custom Pages' },
+  { to: '/admin/messages', label: 'Messages & Signups' },
 ]
 
 function AdminLayout() {
