@@ -127,6 +127,8 @@ export interface MediaItem {
 export interface MediaContent {
   eyebrow: string
   heading: string
+  live_title: string
+  live_youtube_url: string
   items: MediaItem[]
 }
 
