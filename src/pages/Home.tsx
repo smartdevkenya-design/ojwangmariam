@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom'
 import { useSiteData, usePageContent } from '../context/SiteDataContext'
 import type { HomeContent } from '../lib/types'
 
-function Hero({ content }: { content: HomeContent }) {
+function FloatingJoinBar() {
   const { settings } = useSiteData()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [dismissed, setDismissed] = useState(false)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -24,6 +25,57 @@ function Hero({ content }: { content: HomeContent }) {
     setEmail('')
   }
 
+  if (dismissed) return null
+
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-hairline bg-white/97 px-4 py-3 shadow-[0_-8px_24px_rgba(0,0,0,0.12)] backdrop-blur sm:px-6">
+      <div className="mx-auto flex max-w-5xl flex-col items-stretch gap-2 sm:flex-row sm:items-center">
+        <p className="hidden shrink-0 text-sm font-semibold text-navy sm:block">
+          {submitted ? 'Thanks for signing up!' : 'Join the campaign effort'}
+        </p>
+        {!submitted && (
+          <form
+            className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center"
+            onSubmit={handleSubmit}
+          >
+            <input
+              type="text"
+              placeholder="Your Name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full rounded border border-hairline px-3 py-2 text-sm text-ink outline-none focus:border-crimson sm:w-40"
+            />
+            <input
+              type="email"
+              placeholder="Your Email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded border border-hairline px-3 py-2 text-sm text-ink outline-none focus:border-crimson sm:w-52"
+            />
+            <button
+              type="submit"
+              className="shrink-0 rounded bg-crimson px-5 py-2 text-sm font-bold uppercase tracking-wide text-white hover:bg-crimson-dark"
+            >
+              Join Now
+            </button>
+          </form>
+        )}
+        <button
+          type="button"
+          onClick={() => setDismissed(true)}
+          aria-label="Dismiss"
+          className="absolute right-2 top-1 text-lg leading-none text-muted hover:text-navy sm:static sm:ml-2"
+        >
+          ×
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function Hero({ content }: { content: HomeContent }) {
   return (
     <section className="relative flex min-h-[100dvh] items-center overflow-hidden bg-navy-deep [@media(max-height:500px)]:min-h-0">
       <img
@@ -33,48 +85,14 @@ function Hero({ content }: { content: HomeContent }) {
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,21,41,0.75)_0%,rgba(6,21,41,0.85)_60%,rgba(6,21,41,0.97)_100%)]" />
       <div className="relative w-full px-6 py-16 sm:py-24 md:py-32 [@media(max-height:500px)]:py-16">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-crimson">
             {content.hero_eyebrow}
           </p>
-          <h1 className="mt-4 text-[34px] font-bold leading-[1.1] text-white sm:text-[46px] md:text-[64px]">
+          <h1 className="mt-4 text-[42px] font-bold leading-[1.1] text-white sm:text-[58px] md:text-[80px]">
             {content.hero_heading}
           </h1>
-          <p className="mt-5 max-w-lg text-base text-white/75 sm:text-lg">{content.hero_body}</p>
-
-          <form
-            className="mt-8 flex max-w-xl flex-col gap-0 overflow-hidden rounded-lg bg-white shadow-xl sm:flex-row"
-            onSubmit={handleSubmit}
-          >
-            <input
-              type="text"
-              placeholder="Your Name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full border-b border-hairline bg-transparent px-5 py-4 text-sm text-ink outline-none sm:w-1/3 sm:border-b-0"
-            />
-            <input
-              type="email"
-              placeholder="Your Email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border-b border-hairline bg-transparent px-5 py-4 text-sm text-ink outline-none sm:w-1/3 sm:border-b-0 sm:border-l"
-            />
-            <button
-              type="submit"
-              className="w-full shrink-0 bg-crimson px-6 py-4 text-sm font-bold uppercase tracking-wide text-white hover:bg-crimson-dark sm:w-auto"
-            >
-              Join Now
-            </button>
-          </form>
-          {submitted && (
-            <p className="mt-3 text-sm text-white/80">
-              Thanks! Your email client should be opening now — send the
-              message to complete signing up.
-            </p>
-          )}
+          <p className="mx-auto mt-5 max-w-lg text-base text-white/75 sm:text-lg">{content.hero_body}</p>
         </div>
       </div>
     </section>
@@ -202,6 +220,8 @@ function Home() {
       <CtaRibbon content={content} />
       <Highlights content={content} />
       <IssuesPanel content={content} />
+      <div className="h-20 sm:h-16" aria-hidden="true" />
+      <FloatingJoinBar />
     </>
   )
 }
