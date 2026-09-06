@@ -85,14 +85,14 @@ function Hero({ content }: { content: HomeContent }) {
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,21,41,0.75)_0%,rgba(6,21,41,0.85)_60%,rgba(6,21,41,0.97)_100%)]" />
       <div className="relative w-full px-6 py-16 sm:py-24 md:py-32 [@media(max-height:500px)]:py-16">
-        <div className="max-w-2xl text-center">
+        <div className="max-w-4xl text-center md:mx-auto">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-crimson">
             {content.hero_eyebrow}
           </p>
-          <h1 className="mt-4 text-[42px] font-bold leading-[1.1] text-white sm:text-[58px] md:text-[80px]">
+          <h1 className="mt-4 text-[56px] font-bold leading-[1.05] text-white sm:text-[76px] md:text-[104px]">
             {content.hero_heading}
           </h1>
-          <p className="mx-auto mt-5 max-w-lg text-base text-white/75 sm:text-lg">{content.hero_body}</p>
+          <p className="mx-auto mt-5 max-w-lg text-lg text-white/75 sm:text-xl">{content.hero_body}</p>
         </div>
       </div>
     </section>
