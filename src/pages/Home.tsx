@@ -77,11 +77,11 @@ function FloatingJoinBar() {
 
 function Hero({ content }: { content: HomeContent }) {
   return (
-    <section className="relative flex min-h-[100dvh] items-center overflow-hidden bg-navy-deep [@media(max-height:500px)]:min-h-0">
+    <section className="relative flex min-h-[80dvh] items-center overflow-hidden bg-navy-deep sm:min-h-[100dvh] [@media(max-height:500px)]:min-h-0">
       <img
         src={content.hero_image_url}
         alt=""
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover object-top"
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,21,41,0.75)_0%,rgba(6,21,41,0.85)_60%,rgba(6,21,41,0.97)_100%)]" />
       <div className="relative w-full px-6 py-16 sm:py-24 md:py-32 [@media(max-height:500px)]:py-16">
