@@ -102,6 +102,8 @@ export const manifestoSchema: FieldSchema[] = [
 export const mediaSchema: FieldSchema[] = [
   { kind: 'text', key: 'eyebrow', label: 'Eyebrow tag' },
   { kind: 'text', key: 'heading', label: 'Heading' },
+  { kind: 'text', key: 'live_title', label: 'Live section title (leave blank to hide)' },
+  { kind: 'text', key: 'live_youtube_url', label: 'YouTube link (paste any youtube.com or youtu.be URL)' },
   {
     kind: 'array',
     key: 'items',
