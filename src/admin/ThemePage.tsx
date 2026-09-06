@@ -17,7 +17,7 @@ const LABELS: Record<string, string> = {
 }
 
 function ThemePage() {
-  const { settings, refetch } = useSiteData()
+  const { settings, refetch, loading } = useSiteData()
   const [theme, setTheme] = useState<Record<string, string>>(settings.theme)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -29,7 +29,7 @@ function ThemePage() {
     setSaving(true)
     const { data: rows, error } = await supabase
       .from('site_settings')
-      .update({ theme, updated_at: new Date().toISOString() })
+      .update({ theme })
       .eq('id', 1)
       .select()
     setSaving(false)
@@ -47,6 +47,15 @@ function ThemePage() {
     }
     await refetch()
     setSaved(true)
+  }
+
+  if (loading) {
+    return (
+      <div>
+        <h1 className="text-xl font-semibold text-navy">Colors & Theme</h1>
+        <p className="mt-6 text-sm text-muted">Loading your saved colors…</p>
+      </div>
+    )
   }
 
   return (
