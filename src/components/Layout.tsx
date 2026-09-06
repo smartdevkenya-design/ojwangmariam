@@ -73,7 +73,7 @@ function Nav() {
             ))}
           </div>
           <Link
-            to="/contact"
+            to="/contact#donate"
             className="hidden rounded-full bg-crimson px-5 py-2.5 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark md:inline-block"
           >
             Contribute
@@ -99,7 +99,7 @@ function Nav() {
               </Link>
             ))}
             <Link
-              to="/contact"
+              to="/contact#donate"
               onClick={() => setOpen(false)}
               className="mt-2 rounded-full bg-crimson px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wide text-white"
             >
