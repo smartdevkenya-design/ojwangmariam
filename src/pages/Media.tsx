@@ -22,7 +22,7 @@ function Media() {
                 {content.live_title}
               </h2>
             )}
-            <div className="aspect-video w-full max-w-3xl overflow-hidden rounded border border-hairline bg-black shadow-sm">
+            <div className="aspect-video w-full overflow-hidden rounded border border-hairline bg-black shadow-sm">
               <iframe
                 src={embedUrl}
                 title={content.live_title || 'Live video'}
