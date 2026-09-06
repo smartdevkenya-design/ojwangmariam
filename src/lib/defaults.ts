@@ -147,6 +147,8 @@ export const defaultManifestoContent: ManifestoContent = {
 export const defaultMediaContent: MediaContent = {
   eyebrow: 'Media & Impact',
   heading: 'Impact Beyond Politics',
+  live_title: '',
+  live_youtube_url: '',
   items: [
     {
       title: 'Wueeh TV Kenya CBO',
