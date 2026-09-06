@@ -24,6 +24,7 @@ import { PageEditorRoute } from './admin/PageEditorForm'
 import StoriesPage from './admin/StoriesPage'
 import GalleryImagesPage from './admin/GalleryImagesPage'
 import CustomPagesPage from './admin/CustomPagesPage'
+import MessagesPage from './admin/MessagesPage'
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           <Route path="stories" element={<StoriesPage />} />
           <Route path="gallery-images" element={<GalleryImagesPage />} />
           <Route path="custom-pages" element={<CustomPagesPage />} />
+          <Route path="messages" element={<MessagesPage />} />
         </Route>
 
         {/* Admin-created extra pages live at the site root, e.g. /events */}
