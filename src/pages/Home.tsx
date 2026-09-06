@@ -2,24 +2,36 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSiteData, usePageContent } from '../context/SiteDataContext'
 import type { HomeContent } from '../lib/types'
+import { supabase } from '../lib/supabase'
 
 function FloatingJoinBar() {
-  const { settings } = useSiteData()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [dismissed, setDismissed] = useState(false)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!name.trim() || !email.trim()) return
-
-    const subject = encodeURIComponent('I want to join the campaign')
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\nI'd like to join the Ojwang Mariam campaign effort.`
-    )
-    window.location.href = `mailto:${settings.email}?subject=${subject}&body=${body}`
-
+    if (!name.trim() || !email.trim() || submitting) return
+    if (!supabase) {
+      setError('Signups aren\u2019t connected yet.')
+      return
+    }
+    setSubmitting(true)
+    setError(null)
+    const { error: insertError } = await supabase.from('contact_messages').insert({
+      source: 'join_bar',
+      name,
+      email,
+      message: 'Wants to join the campaign effort (Home page Join Now bar).',
+    })
+    setSubmitting(false)
+    if (insertError) {
+      setError('Something went wrong — please try again.')
+      return
+    }
     setSubmitted(true)
     setName('')
     setEmail('')
@@ -31,7 +43,7 @@ function FloatingJoinBar() {
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-hairline bg-white/97 px-4 py-3 shadow-[0_-8px_24px_rgba(0,0,0,0.12)] backdrop-blur sm:px-6">
       <div className="mx-auto flex max-w-5xl flex-col items-stretch gap-2 sm:flex-row sm:items-center">
         <p className="hidden shrink-0 text-sm font-semibold text-navy sm:block">
-          {submitted ? 'Thanks for signing up!' : 'Join the campaign effort'}
+          {submitted ? "Thanks for signing up! We'll be in touch." : 'Join the campaign effort'}
         </p>
         {!submitted && (
           <form
@@ -56,10 +68,12 @@ function FloatingJoinBar() {
             />
             <button
               type="submit"
-              className="shrink-0 rounded bg-crimson px-5 py-2 text-sm font-bold uppercase tracking-wide text-white hover:bg-crimson-dark"
+              disabled={submitting}
+              className="shrink-0 rounded bg-crimson px-5 py-2 text-sm font-bold uppercase tracking-wide text-white hover:bg-crimson-dark disabled:opacity-60"
             >
-              Join Now
+              {submitting ? 'Sending…' : 'Join Now'}
             </button>
+            {error && <span className="text-xs text-crimson sm:ml-2">{error}</span>}
           </form>
         )}
         <button

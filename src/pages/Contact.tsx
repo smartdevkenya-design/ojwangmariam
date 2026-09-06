@@ -1,5 +1,95 @@
+import { useState } from 'react'
 import { useSiteData, usePageContent } from '../context/SiteDataContext'
 import type { ContactContent } from '../lib/types'
+import { supabase } from '../lib/supabase'
+
+function ContactForm({ ctaLabel }: { ctaLabel: string }) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [message, setMessage] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!name.trim() || !email.trim() || !message.trim() || submitting) return
+    if (!supabase) {
+      setError('Messaging isn\u2019t connected yet — please use the email or phone above instead.')
+      return
+    }
+    setSubmitting(true)
+    setError(null)
+    const { error: insertError } = await supabase.from('contact_messages').insert({
+      source: 'contact',
+      name,
+      email,
+      phone: phone || null,
+      message,
+    })
+    setSubmitting(false)
+    if (insertError) {
+      setError('Something went wrong — please try again, or use the email/phone above.')
+      return
+    }
+    setSubmitted(true)
+  }
+
+  if (submitted) {
+    return (
+      <div className="mt-10 rounded border border-white/20 bg-navy p-6">
+        <p className="text-white">Thanks — your message has been received. We'll be in touch soon.</p>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-10 max-w-xl space-y-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <input
+          type="text"
+          placeholder="Your Name"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full rounded border border-white/20 bg-navy px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 focus:border-crimson"
+        />
+        <input
+          type="email"
+          placeholder="Your Email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full rounded border border-white/20 bg-navy px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 focus:border-crimson"
+        />
+      </div>
+      <input
+        type="tel"
+        placeholder="Phone (optional)"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        className="w-full rounded border border-white/20 bg-navy px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 focus:border-crimson"
+      />
+      <textarea
+        placeholder="Your message"
+        required
+        rows={4}
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        className="w-full rounded border border-white/20 bg-navy px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 focus:border-crimson"
+      />
+      {error && <p className="text-sm text-crimson">{error}</p>}
+      <button
+        type="submit"
+        disabled={submitting}
+        className="inline-block rounded-full bg-crimson px-6 py-3 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark disabled:opacity-60"
+      >
+        {submitting ? 'Sending…' : ctaLabel}
+      </button>
+    </form>
+  )
+}
 
 function Contact() {
   const content = usePageContent<ContactContent>('contact')
@@ -40,12 +130,7 @@ function Contact() {
             </div>
           </div>
         </div>
-        <a
-          href={`mailto:${settings.email}`}
-          className="mt-10 inline-block rounded-full bg-crimson px-6 py-3 text-sm font-medium uppercase tracking-wide text-white hover:bg-crimson-dark"
-        >
-          {content.cta_label}
-        </a>
+        <ContactForm ctaLabel={content.cta_label} />
       </div>
     </section>
   )
