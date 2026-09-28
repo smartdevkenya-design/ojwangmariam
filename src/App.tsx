@@ -10,6 +10,7 @@ import Gallery from './pages/Gallery'
 import Volunteer from './pages/Volunteer'
 import Contact from './pages/Contact'
 import Story from './pages/Story'
+import Privacy from './pages/Privacy'
 import DynamicPage from './pages/DynamicPage'
 import NotFound from './pages/NotFound'
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="gallery" element={<Gallery />} />
           <Route path="volunteer" element={<Volunteer />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="privacy" element={<Privacy />} />
           <Route path="stories/:id" element={<Story />} />
         </Route>
 
