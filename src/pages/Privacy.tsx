@@ -37,8 +37,8 @@ function Privacy() {
             the message you send.
           </li>
           <li className={li}>
-            <strong className="text-navy">“Join the campaign” bar and volunteer sign-ups:</strong> your name and email
-            address.
+            <strong className="text-navy">“Join the campaign” bar and volunteer sign-ups:</strong> your name, email address and
+            phone number (optional).
           </li>
           <li className={li}>
             <strong className="text-navy">Technical data:</strong> basic information your browser sends to our hosting

@@ -7,8 +7,10 @@ import SafeImg from '../components/SafeImg'
 
 function FloatingJoinBar() {
   const { settings } = useSiteData()
+  const whatsappUrl = /^https:\/\//i.test(settings.whatsapp_url || '') ? (settings.whatsapp_url as string) : ''
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -27,6 +29,7 @@ function FloatingJoinBar() {
       source: 'join_bar',
       name,
       email,
+      phone: phone.trim() || null,
       message: 'Wants to join the campaign effort (Home page Join Now bar).',
     })
     setSubmitting(false)
@@ -37,6 +40,7 @@ function FloatingJoinBar() {
     setSubmitted(true)
     setName('')
     setEmail('')
+    setPhone('')
   }
 
   if (dismissed) return null
@@ -61,6 +65,13 @@ function FloatingJoinBar() {
               className="w-full rounded border border-hairline px-3 py-2 text-sm text-ink outline-none focus:border-crimson sm:w-40"
             />
             <input
+              type="tel"
+              placeholder="Phone (optional)"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full rounded border border-hairline px-3 py-2 text-sm text-ink outline-none focus:border-crimson sm:w-36"
+            />
+            <input
               type="email"
               placeholder="Your Email"
               required
@@ -77,6 +88,16 @@ function FloatingJoinBar() {
             </button>
             {error && <span className="text-xs text-crimson sm:ml-2">{error}</span>}
           </form>
+        )}
+        {submitted && whatsappUrl && (
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 rounded bg-[#25D366] px-5 py-2 text-center text-sm font-bold uppercase tracking-wide text-white hover:opacity-90"
+          >
+            Join our WhatsApp community
+          </a>
         )}
         {submitted && (
           <p className="flex-1 text-xs text-muted sm:text-sm">
