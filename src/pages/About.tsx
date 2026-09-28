@@ -1,5 +1,6 @@
 import { usePageContent } from '../context/SiteDataContext'
 import type { AboutContent } from '../lib/types'
+import SafeImg from '../components/SafeImg'
 
 function About() {
   const content = usePageContent<AboutContent>('about')
@@ -12,9 +13,9 @@ function About() {
             <h1 className="mt-2 text-[28px] font-medium text-navy md:text-[32px]">{content.heading}</h1>
             <p className="mt-4 text-muted">{content.intro}</p>
           </div>
-          <img
+          <SafeImg
             src={content.portrait_url}
-            alt="Ojwang Mariam (mock portrait)"
+            alt="Ojwang Mariam"
             className="aspect-[4/3] w-full rounded border border-hairline object-cover lg:aspect-[5/4]"
           />
         </div>

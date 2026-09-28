@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useSiteData, usePageContent } from '../context/SiteDataContext'
 import type { HomeContent } from '../lib/types'
 import { supabase } from '../lib/supabase'
+import SafeImg from '../components/SafeImg'
 
 function FloatingJoinBar() {
   const { settings } = useSiteData()
@@ -170,8 +171,8 @@ function Highlights({ content }: { content: HomeContent }) {
               className="group flex flex-col overflow-hidden rounded border border-hairline bg-white shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="relative flex aspect-[16/10] items-end overflow-hidden bg-navy p-4">
-                <img
-                  src={item.image_url || `https://picsum.photos/seed/story-${item.id}/600/400`}
+                <SafeImg
+                  src={item.image_url ?? undefined}
                   alt=""
                   className="absolute inset-0 h-full w-full object-cover opacity-70"
                 />

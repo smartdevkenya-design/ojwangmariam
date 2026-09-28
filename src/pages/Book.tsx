@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { usePageContent } from '../context/SiteDataContext'
 import type { BookContent } from '../lib/types'
+import SafeImg from '../components/SafeImg'
 
 function Book() {
   const content = usePageContent<BookContent>('book')
@@ -8,9 +9,9 @@ function Book() {
     <section className="bg-offwhite">
       <div className="w-full px-6 py-10 sm:py-16">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
-          <img
+          <SafeImg
             src={content.cover_url}
-            alt="Believe Become book cover (mock)"
+            alt="Believe Become book cover"
             className="aspect-[3/4] w-full max-w-sm rounded border border-hairline object-cover"
           />
           <div>
