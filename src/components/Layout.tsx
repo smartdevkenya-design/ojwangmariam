@@ -182,7 +182,12 @@ function Footer() {
       <div className="border-t border-navy-light">
         <div className="flex w-full flex-col items-start justify-between gap-2 px-6 py-4 text-xs text-white/50 sm:gap-4 sm:py-6 md:flex-row md:items-center">
           <span>{settings.footer_copyright}</span>
-          <span>{settings.footer_tagline}</span>
+          <span className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <Link to="/privacy" className="hover:text-white">
+              Privacy Policy
+            </Link>
+            <span>{settings.footer_tagline}</span>
+          </span>
         </div>
       </div>
     </footer>
