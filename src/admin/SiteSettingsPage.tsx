@@ -176,6 +176,17 @@ function SiteSettingsPage() {
         </div>
 
         <div className="rounded border border-hairline bg-offwhite p-4">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-navy">Community</p>
+          <Field label="WhatsApp group or channel link (shown to people after they click Join Now)">
+            <TextInput
+              value={data.whatsapp_url || ''}
+              onChange={(e) => set('whatsapp_url', e.target.value)}
+              placeholder="https://chat.whatsapp.com/..."
+            />
+          </Field>
+        </div>
+
+        <div className="rounded border border-hairline bg-offwhite p-4">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-navy">M-Pesa / Payment Details</p>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <Field label="Paybill">

@@ -62,6 +62,29 @@ function MessagesPage() {
     setRows((prev) => prev.filter((r) => r.id !== id))
   }
 
+  function exportCsv() {
+    const esc = (v: string | null | boolean) => `"${String(v ?? '').replace(/"/g, '""')}"`
+    const header = ['Date', 'Source', 'Name', 'Email', 'Phone', 'Message', 'Read']
+    const lines = visible.map((r) =>
+      [new Date(r.created_at).toLocaleString(), SOURCE_LABEL[r.source] || r.source, r.name, r.email, r.phone, r.message, r.read]
+        .map(esc)
+        .join(',')
+    )
+    const csv = '\uFEFF' + [header.map(esc).join(','), ...lines].join('\r\n')
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }))
+    a.download = `signups-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+
+  function waNumber(phone: string) {
+    const d = phone.replace(/\D/g, '')
+    if (d.startsWith('0')) return '254' + d.slice(1)
+    if (d.startsWith('7') || d.startsWith('1')) return '254' + d
+    return d
+  }
+
   const visible = rows.filter((r) => filter === 'all' || r.source === filter)
   const unreadCount = rows.filter((r) => !r.read).length
 
@@ -73,7 +96,7 @@ function MessagesPage() {
         {unreadCount > 0 && <span className="ml-2 font-semibold text-crimson">{unreadCount} unread</span>}
       </p>
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-4 flex flex-wrap items-center gap-2">
         {(['all', 'join_bar', 'contact'] as const).map((f) => (
           <button
             key={f}
@@ -86,6 +109,14 @@ function MessagesPage() {
             {f === 'all' ? 'All' : SOURCE_LABEL[f]}
           </button>
         ))}
+        <button
+          type="button"
+          onClick={exportCsv}
+          disabled={visible.length === 0}
+          className="ml-auto rounded-full border border-navy px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-navy hover:bg-navy hover:text-white disabled:opacity-40"
+        >
+          Export CSV
+        </button>
       </div>
 
       {loading ? (
@@ -133,6 +164,14 @@ function MessagesPage() {
                   <p>
                     <a href={`tel:${r.phone}`} className="text-navy hover:text-crimson">
                       {r.phone}
+                    </a>
+                    <a
+                      href={`https://wa.me/${waNumber(r.phone)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-3 text-xs font-semibold text-[#128C7E] hover:underline"
+                    >
+                      WhatsApp
                     </a>
                   </p>
                 )}
