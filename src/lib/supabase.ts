@@ -5,11 +5,12 @@ const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
 
 export const supabaseConfigured = Boolean(url && anonKey)
 
-// If env vars are missing, the site still renders (using default content)
-// instead of crashing — this happens during local dev before Supabase is
-// wired up, or if a build runs without the secrets configured.
+// Always hit the network: never let the browser HTTP cache serve stale
+// Supabase responses on refresh or first open.
+const noStoreFetch: typeof fetch = (input, init) => fetch(input, { ...init, cache: 'no-store' })
+
 export const supabase = supabaseConfigured
-  ? createClient(url as string, anonKey as string)
+  ? createClient(url as string, anonKey as string, { global: { fetch: noStoreFetch } })
   : (null as unknown as ReturnType<typeof createClient>)
 
 export const MEDIA_BUCKET = 'media'
