@@ -26,6 +26,7 @@ const PAGE_DEFAULTS: Record<string, unknown> = {
 
 interface SiteDataShape {
   loading: boolean
+  error: string | null
   settings: SiteSettings
   pageContent: Record<string, unknown>
   stories: Story[]
@@ -44,7 +45,8 @@ const SiteDataContext = createContext<SiteDataShape | null>(null)
 
 export function SiteDataProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
-  const [settings, setSettings] = useState<SiteSettings>(defaultSiteSettings)
+  const [error, setError] = useState<string | null>(null)
+  const [settings, setSettings] = useState<SiteSettings>(defaultSiteSettings) // placeholder only; never rendered until Supabase loads
   const [pageContent, setPageContent] = useState<Record<string, unknown>>({})
   const [stories, setStories] = useState<Story[]>([])
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
@@ -52,44 +54,61 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
 
   async function load() {
     if (!supabaseConfigured || !supabase) {
+      setError('Site is not connected to Supabase (missing VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY at build time).')
       setLoading(false)
       return
     }
     setLoading(true)
-    const [settingsRes, pageRes, storiesRes, galleryRes, customRes] = await Promise.all([
-      supabase.from('site_settings').select('*').eq('id', 1).maybeSingle(),
-      supabase.from('page_content').select('page,data'),
-      supabase.from('stories').select('*').order('sort_order', { ascending: true }),
-      supabase.from('gallery_images').select('*').order('sort_order', { ascending: true }),
-      supabase.from('custom_pages').select('*').order('sort_order', { ascending: true }),
-    ])
+    setError(null)
+    try {
+      const [settingsRes, pageRes, storiesRes, galleryRes, customRes] = await Promise.all([
+        supabase.from('site_settings').select('*').eq('id', 1).maybeSingle(),
+        supabase.from('page_content').select('page,data'),
+        supabase.from('stories').select('*').order('sort_order', { ascending: true }),
+        supabase.from('gallery_images').select('*').order('sort_order', { ascending: true }),
+        supabase.from('custom_pages').select('*').order('sort_order', { ascending: true }),
+      ])
 
-    // Log (rather than silently swallow) any query error, so a schema
-    // mismatch or RLS issue shows up in the browser console instead of
-    // just quietly falling back to default content with no clue why.
-    for (const [label, res] of [
-      ['site_settings', settingsRes],
-      ['page_content', pageRes],
-      ['stories', storiesRes],
-      ['gallery_images', galleryRes],
-      ['custom_pages', customRes],
-    ] as const) {
-      if (res.error) console.error(`[SiteDataContext] Failed to load "${label}":`, res.error.message)
-    }
+      const failed = [
+        ['site_settings', settingsRes],
+        ['page_content', pageRes],
+        ['stories', storiesRes],
+        ['gallery_images', galleryRes],
+        ['custom_pages', customRes],
+      ].filter(([, r]) => (r as { error: unknown }).error) as [string, { error: { message: string } }][]
 
-    if (settingsRes.data) setSettings(settingsRes.data as SiteSettings)
-    if (pageRes.data) {
+      for (const [label, r] of failed) console.error(`[SiteDataContext] "${label}":`, r.error.message)
+      if (failed.length) throw new Error(failed.map(([l, r]) => `${l}: ${r.error.message}`).join(' | '))
+      if (!settingsRes.data) throw new Error('site_settings row (id=1) not found in Supabase')
+
+      setSettings(settingsRes.data as SiteSettings)
       const merged: Record<string, unknown> = {}
-      for (const row of pageRes.data as { page: string; data: unknown }[]) {
-        merged[row.page] = row.data
-      }
+      for (const row of (pageRes.data ?? []) as { page: string; data: unknown }[]) merged[row.page] = row.data
       setPageContent(merged)
+      setStories((storiesRes.data ?? []) as Story[])
+      setGalleryImages((galleryRes.data ?? []) as GalleryImage[])
+      setCustomPages((customRes.data ?? []) as CustomPage[])
+    } catch (e) {
+      console.error('[SiteDataContext] load failed', e)
+      setError(e instanceof Error ? e.message : String(e))
+    } finally {
+      setLoading(false)
     }
-    if (storiesRes.data) setStories(storiesRes.data as Story[])
-    if (galleryRes.data) setGalleryImages(galleryRes.data as GalleryImage[])
-    if (customRes.data) setCustomPages(customRes.data as CustomPage[])
-    setLoading(false)
   }
+
+  // Refetch when the tab regains focus or the page is restored from bfcache,
+  // so the site never sits on stale data.
+  useEffect(() => {
+    const onVisible = () => document.visibilityState === 'visible' && load()
+    const onShow = (e: PageTransitionEvent) => e.persisted && load()
+    document.addEventListener('visibilitychange', onVisible)
+    window.addEventListener('pageshow', onShow)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisible)
+      window.removeEventListener('pageshow', onShow)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     load()
@@ -108,9 +127,35 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
   }, [settings])
 
   const value = useMemo<SiteDataShape>(
-    () => ({ loading, settings, pageContent, stories, galleryImages, customPages, refetch: load }),
-    [loading, settings, pageContent, stories, galleryImages, customPages]
+    () => ({ loading, error, settings, pageContent, stories, galleryImages, customPages, refetch: load }),
+    [loading, error, settings, pageContent, stories, galleryImages, customPages]
   )
+
+  const [ready, setReady] = useState(false)
+  useEffect(() => {
+    if (!loading && !error) setReady(true)
+  }, [loading, error])
+
+  // Nothing from defaults.ts is ever painted: hold the UI until Supabase answers.
+  if (!ready) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', fontFamily: 'system-ui, sans-serif', padding: 24, textAlign: 'center' }}>
+        {error ? (
+          <div style={{ maxWidth: 420 }}>
+            <p style={{ fontWeight: 600, marginBottom: 8 }}>Couldn’t load the site.</p>
+            <p style={{ fontSize: 13, opacity: 0.7, marginBottom: 16, wordBreak: 'break-word' }}>{error}</p>
+            <button onClick={() => load()} style={{ padding: '10px 20px', borderRadius: 999, border: 0, background: '#c8102e', color: '#fff', cursor: 'pointer' }}>
+              Retry
+            </button>
+          </div>
+        ) : (
+          <div aria-label="Loading" style={{ width: 32, height: 32, border: '3px solid #ddd', borderTopColor: '#c8102e', borderRadius: '50%', animation: 'sd-spin 0.8s linear infinite' }}>
+            <style>{'@keyframes sd-spin{to{transform:rotate(360deg)}}'}</style>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return <SiteDataContext.Provider value={value}>{children}</SiteDataContext.Provider>
 }
