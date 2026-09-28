@@ -189,35 +189,12 @@ function Footer() {
   )
 }
 
-function FloatingActions() {
-  const { settings } = useSiteData()
-  return (
-    <div className="fixed right-0 top-1/2 z-40 hidden -translate-y-1/2 flex-col lg:flex">
-      <Link
-        to="/book"
-        className="flex h-14 w-14 items-center justify-center bg-crimson text-xl text-white shadow-lg hover:bg-crimson-dark"
-        aria-label="Order the book"
-      >
-        📖
-      </Link>
-      <a
-        href={`tel:${settings.phone.replace(/\s+/g, '')}`}
-        className="flex h-14 w-14 items-center justify-center bg-navy text-xl text-white shadow-lg hover:bg-navy-light"
-        aria-label="Call the campaign"
-      >
-        📞
-      </a>
-    </div>
-  )
-}
-
 function Layout() {
   return (
     <div className="min-h-screen bg-white text-ink">
       <Nav />
       <Outlet />
       <Footer />
-      <FloatingActions />
     </div>
   )
 }
