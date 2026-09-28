@@ -15,6 +15,7 @@ export interface SiteSettings {
   mpesa_paybill: string
   mpesa_account: string
   mpesa_account_name: string
+  whatsapp_url?: string | null
   nav_links: { label: string; to: string }[]
   theme: Record<string, string>
 }

@@ -28,6 +28,7 @@ export const defaultSiteSettings: SiteSettings = {
   mpesa_paybill: '247247',
   mpesa_account: '731328',
   mpesa_account_name: 'Ojwang Mariam Solutions',
+  whatsapp_url: '',
   nav_links: [
     { label: 'Home', to: '/' },
     { label: 'About', to: '/about' },
