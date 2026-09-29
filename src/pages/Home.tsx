@@ -129,6 +129,7 @@ function Hero({ content }: { content: HomeContent }) {
       <img
         src={content.hero_image_url}
         alt=""
+        fetchPriority="high"
         className="absolute inset-0 h-full w-full object-cover object-top"
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,21,41,0.75)_0%,rgba(6,21,41,0.85)_60%,rgba(6,21,41,0.97)_100%)]" />
