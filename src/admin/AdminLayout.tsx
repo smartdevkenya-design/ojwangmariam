@@ -14,6 +14,7 @@ const links = [
   { to: '/admin/pages/gallery', label: 'Gallery Page (text)' },
   { to: '/admin/pages/volunteer', label: 'Volunteer Page' },
   { to: '/admin/pages/contact', label: 'Contact Page' },
+  { to: '/admin/partners', label: 'Partners & Logos' },
   { to: '/admin/stories', label: 'Stories / News' },
   { to: '/admin/gallery-images', label: 'Gallery Photos' },
   { to: '/admin/custom-pages', label: 'Extra / Custom Pages' },
