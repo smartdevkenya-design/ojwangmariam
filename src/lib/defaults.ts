@@ -8,6 +8,7 @@ import type {
   MediaContent,
   SiteSettings,
   VolunteerContent,
+  PartnersContent,
 } from './types'
 
 export const defaultSiteSettings: SiteSettings = {
@@ -209,4 +210,9 @@ export const defaultContactContent: ContactContent = {
   eyebrow: 'Get Involved',
   heading: 'Stand With Ojwang Mariam',
   cta_label: 'Join the Movement',
+}
+
+export const defaultPartnersContent: PartnersContent = {
+  heading: 'Our Partners & Supporters',
+  partners: [],
 }
