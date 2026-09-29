@@ -22,6 +22,7 @@ import Overview from './admin/Overview'
 import SiteSettingsPage from './admin/SiteSettingsPage'
 import ThemePage from './admin/ThemePage'
 import { PageEditorRoute } from './admin/PageEditorForm'
+import LiveVideosPage from './admin/LiveVideosPage'
 import StoriesPage from './admin/StoriesPage'
 import GalleryImagesPage from './admin/GalleryImagesPage'
 import CustomPagesPage from './admin/CustomPagesPage'
@@ -58,6 +59,7 @@ function App() {
           <Route path="settings" element={<SiteSettingsPage />} />
           <Route path="theme" element={<ThemePage />} />
           <Route path="pages/:page" element={<PageEditorRoute />} />
+          <Route path="live-videos" element={<LiveVideosPage />} />
           <Route path="stories" element={<StoriesPage />} />
           <Route path="gallery-images" element={<GalleryImagesPage />} />
           <Route path="custom-pages" element={<CustomPagesPage />} />
