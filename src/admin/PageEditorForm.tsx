@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { PAGE_DEFAULTS, useSiteData } from '../context/SiteDataContext'
 import { PAGE_SCHEMAS, PAGE_TITLES, type ArrayField, type FieldSchema, type SimpleField } from './schema'
 import { Field, ImageField, SaveBar, TextArea, TextInput } from './fields'
+import { getYouTubeId } from '../lib/youtube'
 
 function SimpleFieldInput({
   field,
@@ -118,14 +119,36 @@ function PageEditorForm({ page }: { page: string }) {
   async function handleSave() {
     if (!supabase) return
     setSaving(true)
+
+    // Media page: when the live link is replaced, automatically move the old
+    // live video into "Previous live videos" (newest first, no duplicates).
+    let toSave = data
+    if (page === 'media') {
+      const saved = (pageContent[page] ?? {}) as Record<string, unknown>
+      const oldUrl = ((saved.live_youtube_url as string) || '').trim()
+      const oldId = getYouTubeId(oldUrl)
+      const newId = getYouTubeId(data.live_youtube_url as string)
+      const previous = ((data.previous_lives as Record<string, string>[]) || []).slice()
+      const alreadyListed = previous.some((v) => getYouTubeId(v.youtube_url) === oldId)
+      if (oldId && oldId !== newId && !alreadyListed) {
+        previous.unshift({
+          title: ((saved.live_title as string) || '').trim() || 'Previous live stream',
+          date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+          youtube_url: oldUrl,
+        })
+        toSave = { ...data, previous_lives: previous }
+      }
+    }
+
     const { error } = await supabase
       .from('page_content')
-      .upsert({ page, data, updated_at: new Date().toISOString() })
+      .upsert({ page, data: toSave, updated_at: new Date().toISOString() })
     if (error) {
       setSaving(false)
       alert(`Save failed: ${error.message}`)
       return
     }
+    setData(toSave)
     await refetch()
     setSaving(false)
     setSaved(true)
