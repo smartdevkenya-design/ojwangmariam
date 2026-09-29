@@ -92,7 +92,7 @@ function Media() {
                             <img
                               src={getYouTubeThumbnail(v.youtube_url) ?? ''}
                               alt=""
-                              loading="lazy"
+                              loading="eager"
                               className="h-full w-full object-cover"
                             />
                             <span className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10">
