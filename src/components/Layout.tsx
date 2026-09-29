@@ -30,7 +30,7 @@ function Logo() {
   if (settings.logo_image_url) {
     return (
       <Link to="/" className="flex shrink-0 items-center">
-        <img src={settings.logo_image_url} alt={settings.logo_line1} className="h-10 w-auto object-contain sm:h-12" />
+        <img src={settings.logo_image_url} alt={settings.logo_line1} fetchPriority="high" className="h-10 w-auto object-contain sm:h-12" />
       </Link>
     )
   }
@@ -132,7 +132,7 @@ function PartnersStrip() {
                   src={p.logo_url}
                   alt={p.name}
                   title={p.name}
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                   className="h-28 w-full object-contain sm:h-36 lg:h-44"
                 />
