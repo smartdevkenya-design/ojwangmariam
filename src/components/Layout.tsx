@@ -120,29 +120,39 @@ function PartnersStrip() {
 
   return (
     <section className="border-t border-hairline bg-white">
-      <div className="w-full px-6 py-10 sm:py-12">
-        <h2 className="text-center text-xs font-semibold uppercase tracking-[0.15em] text-muted">
+      <div className="w-full px-6 py-12 sm:py-16">
+        <h2 className="text-center text-sm font-semibold uppercase tracking-[0.15em] text-navy sm:text-base">
           {content.heading || 'Our Partners & Supporters'}
         </h2>
-        <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-6 sm:gap-x-14">
+        <ul className="mt-8 flex flex-wrap items-start justify-center gap-x-12 gap-y-10 sm:gap-x-16">
           {partners.map((p, i) => {
-            const img = (
-              <img
-                src={p.logo_url}
-                alt={p.name}
-                title={p.name}
-                loading="lazy"
-                className="h-12 w-auto max-w-[9rem] object-contain opacity-80 grayscale transition hover:opacity-100 hover:grayscale-0 sm:h-14 sm:max-w-[11rem]"
-              />
+            const card = (
+              <div className="flex w-44 flex-col items-center text-center sm:w-56">
+                <img
+                  src={p.logo_url}
+                  alt={p.name}
+                  loading="lazy"
+                  className="h-28 w-full object-contain sm:h-36"
+                />
+                {p.name && (
+                  <span className="mt-3 text-sm font-semibold leading-snug text-navy sm:text-base">{p.name}</span>
+                )}
+              </div>
             )
             return (
-              <li key={`${p.name}-${i}`} className="flex items-center">
+              <li key={`${p.name}-${i}`}>
                 {p.link ? (
-                  <a href={p.link} target="_blank" rel="noopener noreferrer" aria-label={p.name}>
-                    {img}
+                  <a
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={p.name}
+                    className="block transition hover:scale-105"
+                  >
+                    {card}
                   </a>
                 ) : (
-                  img
+                  card
                 )}
               </li>
             )
