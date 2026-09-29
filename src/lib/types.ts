@@ -167,3 +167,14 @@ export interface ContactContent {
   heading: string
   cta_label: string
 }
+
+export interface Partner {
+  name: string
+  logo_url: string
+  link: string
+}
+
+export interface PartnersContent {
+  heading: string
+  partners: Partner[]
+}
