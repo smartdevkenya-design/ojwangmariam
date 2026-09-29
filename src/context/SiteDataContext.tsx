@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { supabase, supabaseConfigured } from '../lib/supabase'
+import { collectImageUrls, preloadImages, saveImageList, withTimeout } from '../lib/preload'
 import type { CustomPage, GalleryImage, SiteSettings, Story } from '../lib/types'
 import {
   defaultAboutContent,
@@ -90,6 +91,16 @@ export function SiteDataProvider({ children }: { children: ReactNode }) {
       setStories((storiesRes.data ?? []) as Story[])
       setGalleryImages((galleryRes.data ?? []) as GalleryImage[])
       setCustomPages((customRes.data ?? []) as CustomPage[])
+
+      // Photos: request everything now. The must-have ones (logo, home page, partners)
+      // are awaited (max 4s) so the site opens with them already loaded; the rest
+      // keep loading in the background so every other page is instant too.
+      const critical = collectImageUrls([settingsRes.data, merged.home, merged.partners])
+      const everything = collectImageUrls([settingsRes.data, merged, storiesRes.data, galleryRes.data, customRes.data])
+      saveImageList([...critical, ...everything])
+      const criticalDone = preloadImages(critical)
+      void preloadImages([...everything].filter((u) => !critical.has(u)))
+      await withTimeout(criticalDone, 4000)
     } catch (e) {
       console.error('[SiteDataContext] load failed', e)
       setError(e instanceof Error ? e.message : String(e))
