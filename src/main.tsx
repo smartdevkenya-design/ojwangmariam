@@ -5,6 +5,10 @@ import App from './App.tsx'
 import { SiteDataProvider } from './context/SiteDataContext'
 import { ErrorBoundary } from './ErrorBoundary'
 import './index.css'
+import { preconnect, preloadRememberedImages } from './lib/preload'
+
+preconnect(import.meta.env.VITE_SUPABASE_URL as string | undefined)
+preloadRememberedImages()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
