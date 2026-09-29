@@ -121,34 +121,31 @@ function PartnersStrip() {
   return (
     <section className="border-t border-hairline bg-white">
       <div className="w-full px-6 py-12 sm:py-16">
-        <h2 className="text-center text-sm font-semibold uppercase tracking-[0.15em] text-navy sm:text-base">
+        <h2 className="text-center text-sm font-semibold uppercase tracking-[0.15em] text-muted sm:text-base">
           {content.heading || 'Our Partners & Supporters'}
         </h2>
-        <ul className="mt-8 flex flex-wrap items-start justify-center gap-x-12 gap-y-10 sm:gap-x-16">
+        <ul className="mt-10 flex flex-wrap items-start justify-center gap-x-12 gap-y-10 sm:gap-x-16">
           {partners.map((p, i) => {
             const card = (
-              <div className="flex w-44 flex-col items-center text-center sm:w-56">
+              <div className="flex w-44 flex-col items-center text-center sm:w-56 lg:w-64">
                 <img
                   src={p.logo_url}
                   alt={p.name}
+                  title={p.name}
                   loading="lazy"
-                  className="h-28 w-full object-contain sm:h-36"
+                  className="h-28 w-full object-contain sm:h-36 lg:h-44"
                 />
                 {p.name && (
-                  <span className="mt-3 text-sm font-semibold leading-snug text-navy sm:text-base">{p.name}</span>
+                  <span className="mt-4 text-sm font-semibold uppercase tracking-wide text-navy sm:text-base">
+                    {p.name}
+                  </span>
                 )}
               </div>
             )
             return (
-              <li key={`${p.name}-${i}`}>
+              <li key={`${p.name}-${i}`} className="flex items-center">
                 {p.link ? (
-                  <a
-                    href={p.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={p.name}
-                    className="block transition hover:scale-105"
-                  >
+                  <a href={p.link} target="_blank" rel="noopener noreferrer" aria-label={p.name}>
                     {card}
                   </a>
                 ) : (
