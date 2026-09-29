@@ -9,6 +9,7 @@ import {
   defaultHomeContent,
   defaultManifestoContent,
   defaultMediaContent,
+  defaultPartnersContent,
   defaultSiteSettings,
   defaultVolunteerContent,
 } from '../lib/defaults'
@@ -22,6 +23,7 @@ const PAGE_DEFAULTS: Record<string, unknown> = {
   gallery: defaultGalleryContent,
   volunteer: defaultVolunteerContent,
   contact: defaultContactContent,
+  partners: defaultPartnersContent,
 }
 
 interface SiteDataShape {
