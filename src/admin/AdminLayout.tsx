@@ -9,6 +9,7 @@ const links = [
   { to: '/admin/pages/about', label: 'About Page' },
   { to: '/admin/pages/book', label: 'Book Page' },
   { to: '/admin/pages/manifesto', label: 'Manifesto Page' },
+  { to: '/admin/live-videos', label: 'Live Videos' },
   { to: '/admin/pages/media', label: 'Media Page' },
   { to: '/admin/pages/gallery', label: 'Gallery Page (text)' },
   { to: '/admin/pages/volunteer', label: 'Volunteer Page' },
