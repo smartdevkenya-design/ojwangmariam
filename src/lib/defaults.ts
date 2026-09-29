@@ -150,6 +150,8 @@ export const defaultMediaContent: MediaContent = {
   heading: 'Impact Beyond Politics',
   live_title: '',
   live_youtube_url: '',
+  previous_lives_title: 'Previous Live Videos',
+  previous_lives: [],
   items: [
     {
       title: 'Wueeh TV Kenya CBO',

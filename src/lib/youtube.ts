@@ -3,7 +3,7 @@
  * /shorts/) and returns an embeddable https://www.youtube.com/embed/<id>
  * URL, or null if the input isn't a recognizable YouTube link.
  */
-export function getYouTubeEmbedUrl(input: string | undefined | null): string | null {
+export function getYouTubeId(input: string | undefined | null): string | null {
   if (!input) return null
   const trimmed = input.trim()
   if (!trimmed) return null
@@ -35,6 +35,15 @@ export function getYouTubeEmbedUrl(input: string | undefined | null): string | n
   // Strip any trailing path segments/query the id might have picked up.
   id = id.split('/')[0].split('?')[0]
 
-  if (!id) return null
-  return `https://www.youtube.com/embed/${id}`
+  return id || null
+}
+
+export function getYouTubeEmbedUrl(input: string | undefined | null): string | null {
+  const id = getYouTubeId(input)
+  return id ? `https://www.youtube.com/embed/${id}` : null
+}
+
+export function getYouTubeThumbnail(input: string | undefined | null): string | null {
+  const id = getYouTubeId(input)
+  return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : null
 }

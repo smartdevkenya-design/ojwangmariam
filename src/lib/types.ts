@@ -125,11 +125,19 @@ export interface MediaItem {
   image_url: string
 }
 
+export interface PreviousLive {
+  title: string
+  date: string
+  youtube_url: string
+}
+
 export interface MediaContent {
   eyebrow: string
   heading: string
   live_title: string
   live_youtube_url: string
+  previous_lives_title?: string
+  previous_lives?: PreviousLive[]
   items: MediaItem[]
 }
 
