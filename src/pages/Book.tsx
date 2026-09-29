@@ -12,7 +12,7 @@ function Book() {
           <SafeImg
             src={content.cover_url}
             alt="Believe Become book cover"
-            className="aspect-[3/4] w-full max-w-sm rounded border border-hairline object-cover"
+            className="aspect-[1402/1122] w-full rounded border border-hairline bg-white object-contain"
           />
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-crimson">{content.eyebrow}</p>
