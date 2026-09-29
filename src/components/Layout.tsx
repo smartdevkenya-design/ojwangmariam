@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import { useSiteData } from '../context/SiteDataContext'
+import { usePageContent, useSiteData } from '../context/SiteDataContext'
+import type { PartnersContent } from '../lib/types'
 
 function TopBar() {
   const { settings } = useSiteData()
@@ -112,6 +113,46 @@ function Nav() {
   )
 }
 
+function PartnersStrip() {
+  const content = usePageContent<PartnersContent>('partners')
+  const partners = (content.partners ?? []).filter((p) => p.logo_url)
+  if (partners.length === 0) return null
+
+  return (
+    <section className="border-t border-hairline bg-white">
+      <div className="w-full px-6 py-10 sm:py-12">
+        <h2 className="text-center text-xs font-semibold uppercase tracking-[0.15em] text-muted">
+          {content.heading || 'Our Partners & Supporters'}
+        </h2>
+        <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-6 sm:gap-x-14">
+          {partners.map((p, i) => {
+            const img = (
+              <img
+                src={p.logo_url}
+                alt={p.name}
+                title={p.name}
+                loading="lazy"
+                className="h-12 w-auto max-w-[9rem] object-contain opacity-80 grayscale transition hover:opacity-100 hover:grayscale-0 sm:h-14 sm:max-w-[11rem]"
+              />
+            )
+            return (
+              <li key={`${p.name}-${i}`} className="flex items-center">
+                {p.link ? (
+                  <a href={p.link} target="_blank" rel="noopener noreferrer" aria-label={p.name}>
+                    {img}
+                  </a>
+                ) : (
+                  img
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
 function Footer() {
   const { settings, stories } = useSiteData()
   const navLinks = useNavLinks()
@@ -199,6 +240,7 @@ function Layout() {
     <div className="min-h-screen bg-white text-ink">
       <Nav />
       <Outlet />
+      <PartnersStrip />
       <Footer />
     </div>
   )
