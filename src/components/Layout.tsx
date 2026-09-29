@@ -133,6 +133,7 @@ function PartnersStrip() {
                   alt={p.name}
                   title={p.name}
                   loading="lazy"
+                  decoding="async"
                   className="h-28 w-full object-contain sm:h-36 lg:h-44"
                 />
                 {p.name && (
