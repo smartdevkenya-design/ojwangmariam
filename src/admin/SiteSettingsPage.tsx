@@ -88,7 +88,7 @@ function SiteSettingsPage() {
         <div className="rounded border border-hairline bg-offwhite p-4">
           <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-navy">Logo</p>
           <Field label="Logo image (leave blank to use text logo below)">
-            <ImageField value={data.logo_image_url || ''} onChange={(v) => set('logo_image_url', v)} folder="logo" />
+            <ImageField value={data.logo_image_url || ''} onChange={(v) => set('logo_image_url', v)} folder="logo" maxDim={600} />
           </Field>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Text logo — line 1">

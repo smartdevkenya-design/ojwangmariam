@@ -35,14 +35,46 @@ export function ColorInput({ value, onChange }: { value: string; onChange: (v: s
   )
 }
 
+/**
+ * Shrinks an image in the browser before upload so pages load fast.
+ * - Scales down so the longest side is at most `maxDim` px (never scales up)
+ * - Re-encodes as WebP (keeps transparency, so logos stay clean and keep their colours)
+ * - SVG and GIF are left untouched; if the result isn't smaller, the original is used
+ */
+async function compressImage(file: File, maxDim: number): Promise<{ blob: Blob; ext: string }> {
+  const original = { blob: file as Blob, ext: file.name.split('.').pop() || 'jpg' }
+  if (file.type === 'image/svg+xml' || file.type === 'image/gif' || !file.type.startsWith('image/')) return original
+  try {
+    const bitmap = await createImageBitmap(file)
+    const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height))
+    const w = Math.round(bitmap.width * scale)
+    const h = Math.round(bitmap.height * scale)
+    const canvas = document.createElement('canvas')
+    canvas.width = w
+    canvas.height = h
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return original
+    ctx.drawImage(bitmap, 0, 0, w, h)
+    bitmap.close?.()
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/webp', 0.85))
+    if (!blob || blob.type !== 'image/webp' || blob.size >= file.size) return original
+    return { blob, ext: 'webp' }
+  } catch {
+    return original
+  }
+}
+
 export function ImageField({
   value,
   onChange,
   folder = 'uploads',
+  maxDim = 1600,
 }: {
   value: string
   onChange: (url: string) => void
   folder?: string
+  /** Longest side in px the image is scaled down to before upload (default 1600). */
+  maxDim?: number
 }) {
   const fileRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
@@ -55,10 +87,11 @@ export function ImageField({
     }
     setUploading(true)
     setError(null)
-    const ext = file.name.split('.').pop() || 'jpg'
+    const { blob, ext } = await compressImage(file, maxDim)
     const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
-    const { error: uploadError } = await supabase.storage.from(MEDIA_BUCKET).upload(path, file, {
-      cacheControl: '3600',
+    const { error: uploadError } = await supabase.storage.from(MEDIA_BUCKET).upload(path, blob, {
+      cacheControl: '31536000', // file names are unique, so browsers can cache for a year
+      contentType: blob.type || undefined,
       upsert: false,
     })
     if (uploadError) {

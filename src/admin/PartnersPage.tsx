@@ -125,7 +125,7 @@ function PartnersPage() {
             </Field>
           </div>
           <Field label="Logo">
-            <ImageField value={newPartner.logo_url} onChange={(url) => setNewPartner({ ...newPartner, logo_url: url })} folder="partners" />
+            <ImageField value={newPartner.logo_url} onChange={(url) => setNewPartner({ ...newPartner, logo_url: url })} folder="partners" maxDim={600} />
           </Field>
           <button type="button" onClick={addPartner} disabled={busy} className={btnPrimary}>
             Add partner
